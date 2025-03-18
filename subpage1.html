@@ -13,11 +13,14 @@
             background-color: #000;
             color: white;
             display: flex;
+            justify-content: center; /* Centra horizontalmente */
+            align-items: center; /* Centra verticalmente */
+            height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+            text-align: center; /* Centra el texto */
         }
         .main-content {
-            margin-left: 220px;
             width: 100%;
-            text-align: center;
+            max-width: 800px; /* Límite de ancho máximo */
             padding: 20px;
         }
         .container {
@@ -27,8 +30,7 @@
             box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
             display: inline-block;
             border: 2px solid yellow;
-            max-width: 800px;
-            margin: 0 auto;
+            width: 100%;
         }
         .logo {
             width: 200px;
