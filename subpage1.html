@@ -3,7 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RelaxDemia :)</title>
+    <title>RenDemia</title>
+    <link rel="icon" href="rt_1.ico" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: white;
+            display: flex;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #222;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            box-shadow: 2px 0 10px rgba(255, 255, 0, 0.5);
+        }
+        .sidebar a {
+            display: block;
+            margin: 10px 0;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+        .sidebar a:hover {
+            color: yellow;
+        }
+        .main-content {
+            margin-left: 220px;
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+            display: inline-block;
+            border: 2px solid yellow;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .logo {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+        .logoo {
+            width: 350px;
+            margin-bottom: 10px;
+        }
+        .imagen {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+        .gif {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+        a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        a.download-btn {
+            background-color: yellow;
+            color: black;
+            text-decoration: none;
+        }
+        a.download-btn:hover {
+            background-color: #ffcc00;
+        }
+        a.redes-btn {
+            background-color: blue;
+            color: white;
+        }
+        a.redes-btn:hover {
+            background-color: #00ecff;
+        }
+        a.red-btn {
+            background-color: black;
+            color: white;
+        }
+        a.red-btn:hover {
+            background-color: #636363;
+        }
+        a.redd-btn {
+            background-color: purple;
+            color: white;
+        }
+        a.redd-btn:hover {
+            background-color: #c13584;
+        }
+
+        /* Diseño responsivo */
+        @media (max-width: 750px) {
+            body {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 90%;
+                height: auto;
+                position: relative;
+                text-align: center;
+                box-shadow: none;
+                padding: 10px;
+            }
+            .sidebar h2 {
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+            .sidebar a {
+                display: inline-block;
+                margin: 5px;
+                padding: 6px 10px;
+                font-size: 16px;
+            }
+            .main-content {
+                margin-left: 0;
+                width: 90%;
+                padding: 10px;
+            }
+            .container {
+                max-width: 90%;
+                padding: 12px;
+            }
+            .logo {
+                width: 150px;
+            }
+            .logoo {
+                width: 200px;
+            }
+            .imagen {
+                width: 80px;
+            }
+            .gif {
+                width: 160px;
+            }
+            a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Tiempo para relajarte</h1>
