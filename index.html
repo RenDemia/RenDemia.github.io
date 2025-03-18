@@ -54,7 +54,7 @@
             width: 200px;
             margin-bottom: 10px;
         }
-		.logoo {
+        .logoo {
             width: 200px;
             margin-bottom: 10px;
         }
@@ -66,54 +66,39 @@
             width: 200px;
             margin-bottom: 10px;
         }
-        a.download-btn {
+        a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
             display: block;
             margin: 10px 0;
             padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+        }
+        a.download-btn {
             background-color: yellow;
             color: black;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
         }
         a.download-btn:hover {
             background-color: #ffcc00;
         }
         a.redes-btn {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
             background-color: blue;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
         }
         a.redes-btn:hover {
             background-color: #00ecff;
         }
         a.red-btn {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
             background-color: black;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
         }
         a.red-btn:hover {
             background-color: #636363;
         }
         a.redd-btn {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
             background-color: purple;
             color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
         }
         a.redd-btn:hover {
             background-color: #c13584;
@@ -124,43 +109,55 @@
             body {
                 flex-direction: column;
             }
-
             .sidebar {
                 width: 100%;
                 height: auto;
                 position: relative;
                 text-align: center;
                 box-shadow: none;
-                padding-bottom: 10px;
+                padding: 10px;
             }
-
+            .sidebar h2 {
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
             .sidebar a {
                 display: inline-block;
                 margin: 5px;
-                padding: 8px 12px;
+                padding: 6px 10px;
+                font-size: 16px;
             }
-
             .main-content {
                 margin-left: 0;
                 width: 100%;
                 padding: 10px;
             }
-
             .container {
-                max-width: 95%;
-                padding: 15px;
+                max-width: 90%;
+                padding: 12px;
             }
-
-            .logo, .logoo, .imagen, .gif {
-                max-width: 100%;
-                height: auto;
+            .logo {
+                width: 150px;
+            }
+            .logoo {
+                width: 180px;
+            }
+            .imagen {
+                width: 80px;
+            }
+            .gif {
+                width: 160px;
+            }
+            a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
+                font-size: 14px;
+                padding: 8px;
             }
         }
     </style>
 </head>
 <body>
     <div class="sidebar">
-		<img class="logo" src="6_2.png" alt="Logo">
+        <img class="logo" src="6_2.png" alt="Logo">
         <h2>Redes Sociales (aun no activadas)</h2>
         <a class="redes-btn" href="https://www.facebook.com/" target="_blank">Facebook</a>
         <a class="red-btn" href="https://www.x.com/" target="_blank">X</a>
@@ -181,3 +178,4 @@
     </div>
 </body>
 </html>
+
