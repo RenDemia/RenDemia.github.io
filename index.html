@@ -103,6 +103,7 @@
         a.redd-btn:hover {
             background-color: #c13584;
         }
+		
 
         /* Diseño responsivo */
         @media (max-width: 750px) {
@@ -160,6 +161,7 @@
                 padding: 8px;
             }
         }
+		
     </style>
 </head>
 <body>
@@ -174,12 +176,32 @@
         <div class="container">
             <img class="logo" src="6_1.png" alt="Logo">
             <h3>Pagina para subir proyectos, ideas y diseños.</h3>
+			    <div class="language-menu">
+				<h4>No Spanish?, choose your language</h4>
+        <select id="language" onchange="changeLanguage()">
+            <option value="">Language</option>
+            <option value="EN.html">English</option>
+            <option value="JP.html">日本語</option>
+            <option value="CH.html">中文</option>
+        </select>
+    </div>
+
+    <script>
+        function changeLanguage() {
+            var languageSelect = document.getElementById("language");
+            var selectedValue = languageSelect.value;
+            if (selectedValue) {
+                window.location.href = selectedValue;
+            }
+        }
+    </script>
             <img class="imagen" src="Advertencia.jpg" alt="Advertencia">
             <h3 style="color: pink;">"PAGINA AUN EN DESARROLLO"</h3>
             <img class="logoo" src="6.png" alt="Logo">
             <a class="download-btn" href="https://www.mediafire.com/file/1i4zx6v5zpw2uum/Codigo_Calculadora_Solar.txt/file" target="_blank">Calculadora Solar (codigo python)</a>
             <a class="download-btn" href="https://www.mediafire.com/example2" target="_blank">Diseño de techo para biodigestor.</a>
-		<h3>¿Tuviste un dia duro?, ¡Toca el sillón para sentarte y mirar los peces!</h3>
+		<h3>¿Tuviste un dia duro?</h3>
+		<h3>¡Toca el sillón para sentarte y mirar los peces!</h3>
 	<a href="subpage1.html">
   		<img class="imagenes" src="sillon.png" alt="Sillón" />
 	</a>
@@ -187,4 +209,5 @@
     </div>
 </body>
 </html>
+
 
