@@ -13,6 +13,7 @@
             background-color: #000;
             color: white;
             display: flex;
+            cursor: url('pico.cur') 0 0, auto;
         }
         .sidebar {
             width: 200px;
@@ -103,8 +104,10 @@
         a.redd-btn:hover {
             background-color: #c13584;
         }
-		
-
+        a:hover, button:hover {
+            cursor: url('pico2.cur') 0 0, pointer;
+        }
+        
         /* Diseño responsivo */
         @media (max-width: 750px) {
             body {
@@ -146,13 +149,13 @@
             .imagen {
                 width: 80px;
             }
-		}
+        }
             .imagenes {
                 width: 200px;
             }
-	    .imageneses {
-		    width: 50px;
-	    }
+        .imageneses {
+            width: 50px;
+        }
             .gif {
                 width: 160px;
             }
@@ -161,7 +164,7 @@
                 padding: 8px;
             }
         }
-		
+        
     </style>
 </head>
 <body>
@@ -176,8 +179,8 @@
         <div class="container">
             <img class="logo" src="6_1.png" alt="Logo">
             <h3>Pagina para subir proyectos, ideas y diseños.</h3>
-			    <div class="language-menu">
-				<h4>No Spanish?, choose your language</h4>
+                <div class="language-menu">
+                <h4>No Spanish?, choose your language</h4>
         <select id="language" onchange="changeLanguage()">
             <option value="">Language</option>
             <option value="EN.html">English</option>
@@ -200,13 +203,15 @@
             <img class="logoo" src="6.png" alt="Logo">
             <a class="download-btn" href="Calculadora_Solar.html" target="_blank">Calculadora Solar (BETA)</a>
             <a class="download-btn" href="https://www.mediafire.com/example2" target="_blank">Diseño de techo para biodigestor.</a>
-		<h3>¿Tuviste un dia duro?</h3>
-		<h3>¡Toca el sillón para sentarte y mirar los peces!</h3>
-	<a href="subpage1.html">
-  		<img class="imagenes" src="sillon.png" alt="Sillón" />
-	</a>
+        <h3>¿Tuviste un dia duro?</h3>
+        <h3>¡Toca el sillón para sentarte y mirar los peces!</h3>
+    <a href="subpage1.html">
+        <img class="imagenes" src="sillon.png" alt="Sillón" />
+    </a>
         </div>
     </div>
+</body>
+</html>
 </body>
 </html>
 
