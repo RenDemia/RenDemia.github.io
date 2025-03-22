@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Solar BETA</title>
+    <link rel="icon" type="image/x-icon" href="rt_x.ico">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        canvas {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+		.imager {
+			max-width: 200px;
+            margin: 20px auto;
+        }
+		
+    </style>
+</head>
+    <body background= bgcolor="FFCECB">
+<body>
+	<img class="imager" src="6_1.png" alt="Logo">
+    <h2>Calculadora de declinación solar y horas de luz solar</h2>
+    <label for="ciudad">Nombre de la ciudad:</label>
+    <input type="text" id="ciudad" placeholder="Ingrese ciudad">
+    <br><br>
+    <label for="latitud">Latitud:</label>
+    <input type="number" id="latitud" placeholder="Ingrese latitud">
+    <br><br>
+    <button onclick="calcularDeclinacion()"> Calcular </button>
+    
+    <h3>Resultados</h3>
+    <table border="1" style="margin: auto;">
+        <tr>
+            <th> Día </th>
+            <th> Horas de Sol </th>
+            <th> Horas de Noche </th>
+        </tr>
+        <tbody id="tablaResultados"></tbody>
+    </table>
+    
+    <canvas id="graficaSol"></canvas>
+    <canvas id="graficaDeclinacion"></canvas>
+
+    <script>
+        function calcularDeclinacion() {
+            const ciudad = document.getElementById("ciudad").value;
+            const latitud = parseFloat(document.getElementById("latitud").value);
+            const diasdelaño = [15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349];
+            let horasdesol = [];
+            let horanoche = [];
+            let deltagraf = [];
+            let tablaHTML = "";
+
+            diasdelaño.forEach(n => {
+                let delta = 23.45 * Math.sin(((n - 81) * 360 / 365) * (Math.PI / 180));
+                let tandelta = Math.tan(delta * (Math.PI / 180));
+                let tanphi = Math.tan(latitud * (Math.PI / 180));
+                let hora = (2 / 15) * (Math.acos(-tanphi * tandelta) * (180 / Math.PI));
+                let horanoche_valor = 24 - hora;
+                horasdesol.push(hora);
+                horanoche.push(horanoche_valor);
+                deltagraf.push(delta);
+
+                let horaentera = Math.floor(hora);
+                let minutoshora = Math.round((hora - horaentera) * 60);
+                let horanocheentera = Math.floor(horanoche_valor);
+                let minutoshoranoche = Math.round((horanoche_valor - horanocheentera) * 60);
+
+                tablaHTML += `<tr><td>${n}</td><td>${horaentera}:${minutoshora}</td><td>${horanocheentera}:${minutoshoranoche}</td></tr>`;
+            });
+
+            document.getElementById("tablaResultados").innerHTML = tablaHTML;
+
+            new Chart(document.getElementById("graficaSol"), {
+                type: "line",
+                data: {
+                    labels: diasdelaño,
+                    datasets: [
+                        { label: "Horas de Sol", data: horasdesol, borderColor: "gold", fill: false },
+                        { label: "Horas de Noche", data: horanoche, borderColor: "blue", fill: false }
+                    ]
+                },
+                options: { responsive: true }
+            });
+
+            new Chart(document.getElementById("graficaDeclinacion"), {
+                type: "line",
+                data: {
+                    labels: diasdelaño,
+                    datasets: [{ label: "Declinación Solar", data: deltagraf, borderColor: "green", fill: false }]
+                },
+                options: { responsive: true }
+            });
+        }
+    </script>
+</body>
+</html>
