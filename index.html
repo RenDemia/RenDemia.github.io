@@ -32,12 +32,39 @@
         .sidebar a {
             display: block;
             margin: 10px 0;
-            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
             text-decoration: none;
-            font-size: 18px;
         }
-        .sidebar a:hover {
-            color: yellow;
+        .sidebar a.download-btn {
+            background-color: yellow;
+            color: black;
+        }
+        .sidebar a.download-btn:hover {
+            background-color: #ffcc00;
+        }
+        .sidebar a.redes-btn {
+            background-color: blue;
+            color: white;
+        }
+        .sidebar a.redes-btn:hover {
+            background-color: #00ecff;
+        }
+        .sidebar a.red-btn {
+            background-color: black;
+            color: white;
+        }
+        .sidebar a.red-btn:hover {
+            background-color: #636363;
+        }
+        .sidebar a.redd-btn {
+            background-color: purple;
+            color: white;
+        }
+        .sidebar a.redd-btn:hover {
+            background-color: #c13584;
         }
         .main-content {
             margin-left: 240px;
@@ -63,44 +90,6 @@
             width: 100px;
             margin-bottom: 10px;
         }
-        a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-        }
-        a.download-btn {
-            background-color: yellow;
-            color: black;
-            text-decoration: none;
-        }
-        a.download-btn:hover {
-            background-color: #ffcc00;
-        }
-        a.redes-btn {
-            background-color: blue;
-            color: white;
-        }
-        a.redes-btn:hover {
-            background-color: #00ecff;
-        }
-        a.red-btn {
-            background-color: black;
-            color: white;
-        }
-        a.red-btn:hover {
-            background-color: #636363;
-        }
-        a.redd-btn {
-            background-color: purple;
-            color: white;
-        }
-        a.redd-btn:hover {
-            background-color: #c13584;
-        }
-        
         /* Diseño responsivo */
         @media (max-width: 768px) {
             .sidebar {
@@ -168,3 +157,4 @@
     </div>
 </body>
 </html>
+
