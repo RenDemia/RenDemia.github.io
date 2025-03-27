@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RenDemia</title>
-    <link rel=  "icon" type = "image/x-icon" href = "rt_1.ico">
+    <link rel="icon" type="image/x-icon" href="rt_1.ico">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,6 +13,9 @@
             background-color: #000;
             color: white;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             cursor: url('pico.cur') 0 0, auto;
         }
         .sidebar {
@@ -24,6 +27,7 @@
             left: 0;
             height: 100%;
             box-shadow: 2px 0 10px rgba(255, 255, 0, 0.5);
+            text-align: center;
         }
         .sidebar a {
             display: block;
@@ -38,7 +42,8 @@
         .main-content {
             margin-left: 240px;
             width: 100%;
-            text-align: center;
+            display: flex;
+            justify-content: center;
             padding: 20px;
         }
         .container {
@@ -46,25 +51,16 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
-            display: inline-block;
             border: 2px solid yellow;
             max-width: 800px;
-            margin: 0 auto;
+            text-align: center;
         }
         .logo {
             width: 200px;
             margin-bottom: 10px;
         }
-        .logoo {
-            width: 350px;
-            margin-bottom: 10px;
-        }
-        .imagen {
+        .imagen, .gif {
             width: 100px;
-            margin-bottom: 10px;
-        }
-        .gif {
-            width: 200px;
             margin-bottom: 10px;
         }
         a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
@@ -104,36 +100,20 @@
         a.redd-btn:hover {
             background-color: #c13584;
         }
-        a:hover, button:hover {
-            cursor: url('pico2.cur') 0 0, pointer;
-        }
         
         /* Diseño responsivo */
         @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
             .sidebar {
-                width: 95%;
+                width: 100%;
                 height: auto;
                 position: relative;
-                text-align: center;
-                box-shadow: none;
                 padding: 10px;
-            }
-            .sidebar h2 {
-                font-size: 18px;
-                margin-bottom: 5px;
-            }
-            .sidebar a {
-                display: inline-block;
-                margin: 5px;
-                padding: 6px 10px;
-                font-size: 16px;
             }
             .main-content {
                 margin-left: 0;
-                width: 90%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
                 padding: 10px;
             }
             .container {
@@ -143,28 +123,7 @@
             .logo {
                 width: 150px;
             }
-            .logoo {
-                width: 200px;
-            }
-            .imagen {
-                width: 80px;
-            }
         }
-            .imagenes {
-                width: 200px;
-            }
-        .imageneses {
-            width: 50px;
-        }
-            .gif {
-                width: 160px;
-            }
-            a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
-                font-size: 14px;
-                padding: 8px;
-            }
-        }
-        
     </style>
 </head>
 <body>
@@ -179,37 +138,33 @@
         <div class="container">
             <img class="logo" src="6_1.png" alt="Logo">
             <h3>Pagina para subir proyectos, ideas y diseños.</h3>
-                <div class="language-menu">
-                <h4>No Spanish?, choose your language</h4>
-        <select id="language" onchange="changeLanguage()">
-            <option value="">Language</option>
-            <option value="EN.html">English</option>
-            <option value="JP.html">日本語</option>
-            <option value="CH.html">中文</option>
-        </select>
-    </div>
-
-    <script>
-        function changeLanguage() {
-            var languageSelect = document.getElementById("language");
-            var selectedValue = languageSelect.value;
-            if (selectedValue) {
-                window.location.href = selectedValue;
-            }
-        }
-    </script>
+            <h4>No Spanish?, choose your language</h4>
+            <select id="language" onchange="changeLanguage()">
+                <option value="">Language</option>
+                <option value="EN.html">English</option>
+                <option value="JP.html">日本語</option>
+                <option value="CH.html">中文</option>
+            </select>
+            <script>
+                function changeLanguage() {
+                    var languageSelect = document.getElementById("language");
+                    var selectedValue = languageSelect.value;
+                    if (selectedValue) {
+                        window.location.href = selectedValue;
+                    }
+                }
+            </script>
             <img class="imagen" src="Advertencia.jpg" alt="Advertencia">
             <h3 style="color: pink;">"PAGINA AUN EN DESARROLLO"</h3>
-            <img class="logoo" src="6.png" alt="Logo">
+            <img class="logo" src="6.png" alt="Logo">
             <a class="download-btn" href="Calculadora_Solar.html" target="_blank">Calculadora Solar (BETA)</a>
             <a class="download-btn" href="https://www.mediafire.com/example2" target="_blank">Diseño de techo para biodigestor.</a>
-        <h3>¿Tuviste un dia duro?</h3>
-        <h3>¡Toca el sillón para sentarte y mirar los peces!</h3>
-    <a href="ewwe.html">
-        <img class="imagenes" src="sillon.png" alt="Sillón" />
-    </a>
+            <h3>¿Tuviste un día duro?</h3>
+            <h3>¡Toca el sillón para sentarte y mirar los peces!</h3>
+            <a href="ewwe.html">
+                <img class="imagen" src="sillon.png" alt="Sillón" />
+            </a>
         </div>
     </div>
 </body>
 </html>
-
