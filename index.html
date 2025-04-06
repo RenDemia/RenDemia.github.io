@@ -4,20 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RenDemia</title>
-    <link rel=  "icon" type = "image/x-icon" href = "rt_1.ico">
+    <link rel="icon" type="image/x-icon" href="rt_1.ico">
     <style>
-    body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-        padding: 0;
-        background-image: url('fondo2.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        color: white;
-        display: flex;
-        cursor: url('red2.cur') 0 0, auto;
-    }
+        html, body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            cursor: url('red2.cur') 0 0, auto;
+            position: relative;
+            z-index: 0;
+        }
+
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 100vw;
+            height: 100vh;
+            background-color: black;
+        }
+
         .sidebar {
             width: 200px;
             background-color: #df4a4a;
@@ -38,12 +53,14 @@
         .sidebar a:hover {
             color: yellow;
         }
+
         .main-content {
             margin-left: 240px;
-            width: 100%;
+            width: calc(100% - 240px);
             text-align: center;
             padding: 20px;
         }
+
         .container {
             background: #000000;
             padding: 20px;
@@ -54,6 +71,7 @@
             max-width: 800px;
             margin: 0 auto;
         }
+
         .logo {
             width: 200px;
             margin-bottom: 10px;
@@ -70,6 +88,7 @@
             width: 200px;
             margin-bottom: 10px;
         }
+
         a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
             display: block;
             margin: 10px 0;
@@ -78,14 +97,17 @@
             font-weight: bold;
             text-align: center;
         }
+
         a.download-btn {
             background-color: white;
             color: black;
             text-decoration: none;
         }
+
         a.download-btn:hover {
             background-color: #ffcc00;
         }
+
         a.redes-btn {
             background-color: blue;
             color: white;
@@ -107,11 +129,11 @@
         a.redd-btn:hover {
             background-color: #c13584;
         }
+
         a:hover, button:hover {
             cursor: url('red.cur') 4 0, pointer;
         }
-        
-        /*PARA CELULAR*/
+
         @media (max-width: 768px) {
             body {
                 flex-direction: column;
@@ -153,24 +175,23 @@
                 width: 80px;
             }
         }
-            .imagenes {
-                width: 200px;
-            }
+        .imagenes {
+            width: 200px;
+        }
         .imageneses {
             width: 50px;
         }
-            .gif {
-                width: 160px;
-            }
-            a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
-                font-size: 14px;
-                padding: 8px;
-            }
+        .gif {
+            width: 160px;
         }
-        
+        a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
+            font-size: 14px;
+            padding: 8px;
+        }
     </style>
 </head>
 <body>
+    <canvas id="bgCanvas"></canvas>
     <div class="sidebar">
         <img class="logo" src="6_2.png" alt="Logo">
         <h2>Redes Sociales (aun no activadas)</h2>
@@ -182,36 +203,131 @@
         <div class="container">
             <img class="logo" src="6_1.png" alt="Logo">
             <h3>Pagina para subir proyectos, ideas y diseños.</h3>
-                <div class="language-menu">
+            <div class="language-menu">
                 <h4>No Spanish?, choose your language</h4>
-        <select id="language" onchange="changeLanguage()">
-            <option value="">Language</option>
-            <option value="EN.html">English</option>
-            <option value="JP.html">日本語</option>
-            <option value="CH.html">中文</option>
-        </select>
-    </div>
-
-    <script>
-        function changeLanguage() {
-            var languageSelect = document.getElementById("language");
-            var selectedValue = languageSelect.value;
-            if (selectedValue) {
-                window.location.href = selectedValue;
-            }
-        }
-    </script>
+                <select id="language" onchange="changeLanguage()">
+                    <option value="">Language</option>
+                    <option value="EN.html">English</option>
+                    <option value="JP.html">日本語</option>
+                    <option value="CH.html">中文</option>
+                </select>
+            </div>
+            <script>
+                function changeLanguage() {
+                    var languageSelect = document.getElementById("language");
+                    var selectedValue = languageSelect.value;
+                    if (selectedValue) {
+                        window.location.href = selectedValue;
+                    }
+                }
+            </script>
             <img class="imagen" src="Advertencia.jpg" alt="Advertencia">
             <h3 style="color: pink;">"PAGINA AUN EN DESARROLLO"</h3>
             <img class="logoo" src="6.png" alt="Logo">
-            <a class="download-btn" href="Calculadora_Solar.html" target="_blank">Calculadora Solar (BETA)</a>
-            <a class="download-btn" href="https://www.mediafire.com/example2" target="_blank">Diseño de techo para biodigestor.</a>
-        <h3>cftyb</h3>
-        <h3>¡Tsd56</h3>
-    <a href="ewwe.html">
-        <img class="imagenes" src="sillon.png" alt="Sillón" />
-    </a>
+            <a class="download-btn" href="Calculadora_Solar.html" download>Calculadora Solar (BETA)</a>
+            <a class="download-btn" href="https://www.mediafire.com/file/jycu4zxj6bsz5m3/Dise%C3%B1o_Biodigestor.rar/file" target="_blank">Diseño de techo para biodigestor.</a>
+            <h3>cftyb</h3>
+            <h3>¡Tsd56</h3>
+            <a href="ewwe.html">
+                <img class="imagenes" src="sillon.png" alt="Sillón" />
+            </a>
         </div>
+        <button onclick="toggleBackground()">Cambiar fondo</button>
     </div>
+
+    <script>
+        const canvas = document.getElementById("bgCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let cellSize = 10;
+        let rows = Math.floor(window.innerHeight / cellSize);
+        let cols = Math.floor(window.innerWidth / cellSize);
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let grid = Array.from({ length: rows }, () => Array(cols).fill(0));
+        let backgroundBlack = true;
+
+        function initGrid() {
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    grid[i][j] = Math.random() < 0.2 ? 1 : 0;
+                }
+            }
+        }
+
+        function drawGrid() {
+            if (backgroundBlack) {
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            } else {
+                ctx.fillStyle = "black";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                for (let i = 0; i < rows; i++) {
+                    for (let j = 0; j < cols; j++) {
+                        if (grid[i][j] === 1) {
+                            ctx.fillStyle = "#0040ff"; // Azul fuerte
+                            ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                        }
+                    }
+                }
+            }
+        }
+
+        function getNextGeneration() {
+            let newGrid = grid.map(arr => [...arr]);
+            let changed = false;
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    let neighbors = countNeighbors(i, j);
+                    if (grid[i][j] === 1 && (neighbors < 2 || neighbors > 3)) {
+                        newGrid[i][j] = 0;
+                        changed = true;
+                    } else if (grid[i][j] === 0 && neighbors === 3) {
+                        newGrid[i][j] = 1;
+                        changed = true;
+                    }
+                }
+            }
+            let isSame = JSON.stringify(grid) === JSON.stringify(newGrid);
+            grid = newGrid;
+            return !isSame;
+        }
+
+        function countNeighbors(x, y) {
+            let sum = 0;
+            for (let i = -1; i <= 1; i++) {
+                for (let j = -1; j <= 1; j++) {
+                    if (i === 0 && j === 0) continue;
+                    let row = (x + i + rows) % rows;
+                    let col = (y + j + cols) % cols;
+                    sum += grid[row][col];
+                }
+            }
+            return sum;
+        }
+
+        function update() {
+            if (getNextGeneration()) {
+                drawGrid();
+                requestAnimationFrame(update);
+            }
+        }
+
+        canvas.addEventListener("click", () => {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        });
+
+        function toggleBackground() {
+            backgroundBlack = !backgroundBlack;
+            drawGrid();
+        }
+
+        initGrid();
+        drawGrid();
+        requestAnimationFrame(update);
+    </script>
 </body>
 </html>
