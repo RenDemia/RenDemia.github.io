@@ -1,104 +1,244 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Solar BETA</title>
-    <link rel="icon" type="image/x-icon" href="rt_x.ico">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        canvas {
-            max-width: 600px;
-            margin: 20px auto;
-        }
-		.imager {
-			max-width: 200px;
-            margin: 20px auto;
-        }
-		
-    </style>
+  <meta charset="UTF-8">
+  <title>Calculadora Solar</title>
+  <link rel="icon" type="image/x-icon" href="rt_x.ico">
+  <script src="plotly-latest.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #000;
+      color: white;
+    }
+    h1, h2 {
+      text-align: center;
+      color: white;
+    }
+    .form-container {
+      max-width: 500px;
+      width: 100%;
+      background: #1e1e1e;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-bottom: 5px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      background-color: #333;
+      border: 1px solid #555;
+      border-radius: 5px;
+      color: white;
+    }
+    button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #edff21;
+	  color: black;
+    }
+    #resultado, #grafica1, #grafica2, #grafica3, #grafica4 {
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 30px;
+      min-height: 300px;
+    }
+    .export-buttons {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    .export-buttons button {
+      margin: 5px;
+    }
+  </style>
 </head>
-    <body background= bgcolor="FFCECB">
 <body>
-	<img class="imager" src="6_1.png" alt="Logo">
-    <h2>Calculadora de declinación solar y horas de luz solar</h2>
-    <label for="ciudad">Nombre de la ciudad:</label>
-    <input type="text" id="ciudad" placeholder="Ingrese ciudad">
-    <br><br>
-    <label for="latitud">Latitud:</label>
-    <input type="number" id="latitud" placeholder="Ingrese latitud">
-    <br><br>
-    <button onclick="calcularDeclinacion()"> Calcular </button>
-    
-    <h3>Resultados</h3>
-    <table border="1" style="margin: auto;">
-        <tr>
-            <th> Día </th>
-            <th> Horas de Sol </th>
-            <th> Horas de Noche </th>
-        </tr>
-        <tbody id="tablaResultados"></tbody>
-    </table>
-    
-    <canvas id="graficaSol"></canvas>
-    <canvas id="graficaDeclinacion"></canvas>
+	<div class="logo-container">
+        <img src="6_1.png" style="width: 250px;" alt="logo">
+    </div>
+  <h1>Calculadora Solar</h1>
+  <div class="form-container">
+    <div class="form-group">
+      <label>Ciudad:</label>
+      <input type="text" id="ciudad">
+    </div>
+    <div class="form-group">
+      <label>Latitud:</label>
+      <input type="number" id="latitud">
+    </div>
+    <div class="form-group">
+      <label>Longitud:</label>
+      <input type="number" id="longitud">
+    </div>
+    <div class="form-group">
+      <label>Día del año (1-365):</label>
+      <input type="number" id="dia">
+    </div>
+    <div class="form-group">
+      <label>Hora (HH:MM):</label>
+      <input type="time" id="hora">
+    </div>
+    <button onclick="calcular()">Calcular</button>
+  </div>
 
-    <script>
-        function calcularDeclinacion() {
-            const ciudad = document.getElementById("ciudad").value;
-            const latitud = parseFloat(document.getElementById("latitud").value);
-            const diasdelaño = [15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349];
-            let horasdesol = [];
-            let horanoche = [];
-            let deltagraf = [];
-            let tablaHTML = "";
+  <div class="export-buttons">
+    <button onclick="descargarTodoComoImagen()">Descargar Gráficas como Imagen</button>
+    <button onclick="exportarCSV()">Exportar Datos CSV</button>
+  </div>
+  <div>
+    <img src="Las_Meninas_01.jpg" style="width: 500px;" alt="logo">
+   </div>
+  <div><h3>Graficas:</h3></div>
+  <div id="resultado"></div>
+  <div id="grafica1"></div>
+  <div id="grafica2"></div>
+  <div id="grafica3"></div>
+  <div id="grafica4"></div>
 
-            diasdelaño.forEach(n => {
-                let delta = 23.45 * Math.sin(((n - 81) * 360 / 365) * (Math.PI / 180));
-                let tandelta = Math.tan(delta * (Math.PI / 180));
-                let tanphi = Math.tan(latitud * (Math.PI / 180));
-                let hora = (2 / 15) * (Math.acos(-tanphi * tandelta) * (180 / Math.PI));
-                let horanoche_valor = 24 - hora;
-                horasdesol.push(hora);
-                horanoche.push(horanoche_valor);
-                deltagraf.push(delta);
+  <script>
+    function rad(x) { return x * Math.PI / 180; }
+    function deg(x) { return x * 180 / Math.PI; }
 
-                let horaentera = Math.floor(hora);
-                let minutoshora = Math.round((hora - horaentera) * 60);
-                let horanocheentera = Math.floor(horanoche_valor);
-                let minutoshoranoche = Math.round((horanoche_valor - horanocheentera) * 60);
+    let datosExportables = [];
 
-                tablaHTML += `<tr><td>${n}</td><td>${horaentera}:${minutoshora}</td><td>${horanocheentera}:${minutoshoranoche}</td></tr>`;
-            });
+    function calcular() {
+      const ciudad = document.getElementById("ciudad").value;
+      const latitud = parseFloat(document.getElementById("latitud").value);
+      const longitud = parseFloat(document.getElementById("longitud").value);
+      const diaAdicional = parseInt(document.getElementById("dia").value);
+      const horaStr = document.getElementById("hora").value;
+      const horas = parseInt(horaStr.split(":")[0]);
+      const minutos = parseInt(horaStr.split(":")[1]);
+      const horaDecimal = horas + minutos / 60;
 
-            document.getElementById("tablaResultados").innerHTML = tablaHTML;
+      let diasdelaño = [15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349];
+      if (!diasdelaño.includes(diaAdicional)) diasdelaño.push(diaAdicional);
+      diasdelaño.sort((a, b) => a - b);
 
-            new Chart(document.getElementById("graficaSol"), {
-                type: "line",
-                data: {
-                    labels: diasdelaño,
-                    datasets: [
-                        { label: "Horas de Sol", data: horasdesol, borderColor: "gold", fill: false },
-                        { label: "Horas de Noche", data: horanoche, borderColor: "blue", fill: false }
-                    ]
-                },
-                options: { responsive: true }
-            });
+      let diasgrafica = [], deltagraf = [], horasdesol = [], horanoche = [], eotgraf = [];
+      datosExportables = [];
 
-            new Chart(document.getElementById("graficaDeclinacion"), {
-                type: "line",
-                data: {
-                    labels: diasdelaño,
-                    datasets: [{ label: "Declinación Solar", data: deltagraf, borderColor: "green", fill: false }]
-                },
-                options: { responsive: true }
-            });
-        }
-    </script>
+      diasdelaño.forEach(n => {
+        const delta = 23.45 * Math.sin(rad(((n - 81) * 360) / 365));
+        const tandelta = Math.tan(rad(delta));
+        const tanphi = Math.tan(rad(latitud));
+        let horaSol = 0;
+
+        try {
+          horaSol = (2 / 15) * deg(Math.acos(-tanphi * tandelta));
+        } catch (e) { horaSol = 0; }
+
+        const B = (360 / 365) * (n - 81);
+        const EoT = 229.18 * (0.000075 + 0.001868 * Math.cos(rad(B)) - 0.032077 * Math.sin(rad(B))
+                    - 0.014615 * Math.cos(rad(2 * B)) - 0.040849 * Math.sin(rad(2 * B)));
+
+        diasgrafica.push(n);
+        deltagraf.push(delta);
+        horasdesol.push(horaSol);
+        horanoche.push(24 - horaSol);
+        eotgraf.push(EoT);
+
+        datosExportables.push({ dia: n, delta, horaSol, noche: 24 - horaSol, eot: EoT });
+      });
+
+      document.getElementById("resultado").innerHTML = `<h2>${ciudad}</h2>`;
+
+      const layoutBase = {
+        plot_bgcolor: '#000',
+        paper_bgcolor: '#000',
+        font: { color: 'white' }
+      };
+
+      Plotly.newPlot('grafica1', [
+        { x: diasgrafica, y: horasdesol, name: 'Horas de sol', mode: 'lines+markers' },
+        { x: diasgrafica, y: horanoche, name: 'Horas de noche', mode: 'lines+markers' }
+      ], { ...layoutBase, title: 'Horas de sol y noche', xaxis: {title: 'Día'}, yaxis: {title: 'Horas'} });
+
+      Plotly.newPlot('grafica2', [
+        { x: diasgrafica, y: deltagraf, name: 'Declinación solar', mode: 'lines+markers', marker: {color: 'green'} }
+      ], { ...layoutBase, title: 'Declinación solar', xaxis: {title: 'Día'}, yaxis: {title: 'Delta (°)'} });
+
+      Plotly.newPlot('grafica3', [
+        { x: diasgrafica, y: eotgraf, name: 'EoT', mode: 'lines+markers', marker: {color: 'red'} }
+      ], { ...layoutBase, title: 'Ecuación del Tiempo', xaxis: {title: 'Día'}, yaxis: {title: 'Minutos'} });
+
+      const deltaDia = 23.45 * Math.sin(rad(((diaAdicional - 81) * 360) / 365));
+      let horaAmanecer = 0, horaAtardecer = 24;
+      try {
+        const ha = Math.acos(-Math.tan(rad(latitud)) * Math.tan(rad(deltaDia)));
+        horaAmanecer = 12 - (2 / 15) * deg(ha);
+        horaAtardecer = 12 + (2 / 15) * deg(ha);
+      } catch (e) {}
+
+      let horasDia = [], azimuts = [], elevaciones = [];
+      for (let t = horaAmanecer; t <= horaAtardecer; t += 0.2) {
+        const HRA = 15 * (t - 12);
+        const cosThetaZ = Math.sin(rad(latitud)) * Math.sin(rad(deltaDia)) +
+                          Math.cos(rad(latitud)) * Math.cos(rad(deltaDia)) * Math.cos(rad(HRA));
+        const thetaZ = deg(Math.acos(cosThetaZ));
+        const elev = 90 - thetaZ;
+
+        let gammaS = 180;
+        try {
+          const cosGammaS = (Math.sin(rad(deltaDia)) * Math.cos(rad(latitud)) -
+                            Math.cos(rad(deltaDia)) * Math.sin(rad(latitud)) * Math.cos(rad(HRA))) /
+                            Math.sin(rad(thetaZ));
+          gammaS = deg(Math.acos(cosGammaS));
+          if (HRA > 0) gammaS = 360 - gammaS;
+        } catch (e) {}
+
+        horasDia.push(t);
+        azimuts.push(gammaS);
+        elevaciones.push(elev);
+      }
+
+      Plotly.newPlot('grafica4', [
+        { x: azimuts, y: elevaciones, mode: 'lines+markers', name: 'Trayectoria solar', marker: {color: 'purple'} }
+      ], { ...layoutBase, title: `Azimut vs Elevación - Día ${diaAdicional}`, xaxis: {title: 'Azimut (°)'}, yaxis: {title: 'Elevación (°)'} });
+    }
+
+    function descargarTodoComoImagen() {
+      for (let i = 1; i <= 4; i++) {
+        Plotly.downloadImage(document.getElementById(`grafica${i}`), {
+          format: 'png',
+          filename: `grafica${i}`
+        });
+      }
+    }
+
+    function exportarCSV() {
+      const encabezado = "Dia,Declinacion,HorasSol,HorasNoche,EoT\n";
+      const filas = datosExportables.map(d => `${d.dia},${d.delta.toFixed(2)},${d.horaSol.toFixed(2)},${d.noche.toFixed(2)},${d.eot.toFixed(2)}`).join("\n");
+      const blob = new Blob([encabezado + filas], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "datos_solares.csv";
+      a.click();
+    }
+  </script>
 </body>
 </html>
