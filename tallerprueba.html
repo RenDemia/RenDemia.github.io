@@ -73,8 +73,8 @@
         <input type="number" id="latitud" placeholder="Latitud en grados">
     </div>
     <div class="form-group">
-        <label for="longitud">Longitud:</label>
-        <input type="number" id="longitud" placeholder="Longitud en grados">
+        <label for="longitud">Longitud (use signo negativo para longitudes oeste):</label>
+        <input type="text" id="longitud" placeholder="Longitud en grados">
     </div>
     <div class="form-group">
         <label for="dia">Día del año (1-365):</label>
@@ -99,9 +99,8 @@
         <thead>
             <tr>
                 <th>Día</th>
+                <th>Hora (HH:MM)</th>
                 <th>HRA (°)</th>
-                <th>Horas de Sol</th>
-                <th>Horas sin Sol</th>
                 <th>Ángulo de Incidencia (°)</th>
             </tr>
         </thead>
@@ -129,72 +128,59 @@
         const beta = parseFloat(document.getElementById('inclinacion').value);
 
         // Variables iniciales
-        let diasGrafica = [];
+        let diasGrafica = [dia];
         let horasSol = [];
         let horasNoche = [];
         let declinacion = [];
         let angulosIncidencia = [];
-        let HRAEspecifico = null;
 
         // Limpiar tabla antes de llenarla
         const tablaResultados = document.getElementById('tablaResultados').getElementsByTagName('tbody')[0];
         tablaResultados.innerHTML = '';
 
-        // Cálculos y resultados
-        for (let n = 1; n <= 365; n++) {
-            let delta = 23.45 * Math.sin(Math.radians(((n - 81) * 360) / 365));
-            let tandelta = Math.tan(Math.radians(delta));
-            let tanphi = Math.tan(Math.radians(latitud));
+        // Realizar cálculos solo para el día especificado
+        let n = dia;
 
-            let hora = (2 / 15) * Math.degrees(Math.acos(-tanphi * tandelta));
-            let horanocheValor = 24 - hora;
-            let horaEntera = Math.floor(hora);
-            let minutosEntero = Math.round((hora - horaEntera) * 60);
-            let horaNocheEntera = Math.floor(horanocheValor);
-            let minutosEnteroHoraNoche = Math.round((horanocheValor - horaNocheEntera) * 60);
+        let delta = 23.45 * Math.sin(Math.radians(((n - 81) * 360) / 365));
+        let tandelta = Math.tan(Math.radians(delta));
+        let tanphi = Math.tan(Math.radians(latitud));
 
-            let B = (360 / 365) * (n - 81);
-            let EoT = 229.18 * (0.000075 + 0.001868 * Math.cos(Math.radians(B)) - 0.032077 * Math.sin(Math.radians(B))
-                                - 0.014615 * Math.cos(Math.radians(2 * B)) - 0.040849 * Math.sin(Math.radians(2 * B)));
-            let LSTM = 15 * Math.round(longitud / 15);
-            let TC = 4 * (longitud - LSTM) + EoT;
-            let LST = hora + TC / 60;
-            let HRA = 15 * (LST - 12);
+        let horaCalculada = (2 / 15) * Math.degrees(Math.acos(-tanphi * tandelta));
+        let horanocheValor = 24 - horaCalculada;
+        let horaEntera = Math.floor(horaCalculada);
+        let minutosEntero = Math.round((horaCalculada - horaEntera) * 60);
+        let horaNocheEntera = Math.floor(horanocheValor);
+        let minutosEnteroHoraNoche = Math.round((horanocheValor - horaNocheEntera) * 60);
 
-            if (n == dia && HRAEspecifico === null) {
-                HRAEspecifico = 15 * (horaEspecifica - 12);
-            }
+        let B = (360 / 365) * (n - 81);
+        let EoT = 229.18 * (0.000075 + 0.001868 * Math.cos(Math.radians(B)) - 0.032077 * Math.sin(Math.radians(B))
+                            - 0.014615 * Math.cos(Math.radians(2 * B)) - 0.040849 * Math.sin(Math.radians(2 * B)));
+        let LSTM = 15 * Math.round(longitud / 15);
+        let TC = 4 * (longitud - LSTM) + EoT;
+        let LST = horaCalculada + TC / 60;
+        let HRA = 15 * (LST - 12);
 
-            // Cálculo de ángulo zenital (θz)
-            let cosThetaZ = Math.sin(Math.radians(latitud)) * Math.sin(Math.radians(delta)) +
-                            Math.cos(Math.radians(latitud)) * Math.cos(Math.radians(delta)) * Math.cos(Math.radians(HRA));
-            let thetaZ = Math.degrees(Math.acos(cosThetaZ));
+        // Cálculo de ángulo zenital (θz)
+        let cosThetaZ = Math.sin(Math.radians(latitud)) * Math.sin(Math.radians(delta)) +
+                        Math.cos(Math.radians(latitud)) * Math.cos(Math.radians(delta)) * Math.cos(Math.radians(HRA));
+        let thetaZ = Math.degrees(Math.acos(cosThetaZ));
 
-            // Cálculo de ángulo de incidencia
-            let y_s = 0;
-            let y = HRA;
+        // Cálculo de ángulo de incidencia
+        let y_s = 0;
+        let y = HRA;
 
-            let cosThetaI = Math.cos(Math.radians(beta)) * cosThetaZ + 
-                            Math.sin(Math.radians(beta)) * Math.sin(Math.radians(thetaZ)) * Math.cos(Math.radians(y_s - y));
-            let thetaI = Math.degrees(Math.acos(cosThetaI));
+        let cosThetaI = Math.cos(Math.radians(beta)) * cosThetaZ + 
+                        Math.sin(Math.radians(beta)) * Math.sin(Math.radians(thetaZ)) * Math.cos(Math.radians(y_s - y));
+        let thetaI = Math.degrees(Math.acos(cosThetaI));
 
-            // Guardar los resultados para la gráfica y la tabla
-            diasGrafica.push(n);
-            horasSol.push(hora);
-            horasNoche.push(horanocheValor);
-            declinacion.push(delta);
-            angulosIncidencia.push(thetaI);
+        // Agregar resultados a la tabla
+        const row = tablaResultados.insertRow();
+        row.insertCell(0).textContent = n;
+        row.insertCell(1).textContent = `${horaEntera}:${minutosEntero < 10 ? "0" + minutosEntero : minutosEntero}`;
+        row.insertCell(2).textContent = HRA.toFixed(2);
+        row.insertCell(3).textContent = thetaI.toFixed(2);
 
-            // Agregar a la tabla de resultados
-            const row = tablaResultados.insertRow();
-            row.insertCell(0).textContent = n;
-            row.insertCell(1).textContent = HRA.toFixed(2);
-            row.insertCell(2).textContent = `${horaEntera}:${minutosEntero < 10 ? "0" + minutosEntero : minutosEntero}`;
-            row.insertCell(3).textContent = `${horaNocheEntera}:${minutosEnteroHoraNoche < 10 ? "0" + minutosEnteroHoraNoche : minutosEnteroHoraNoche}`;
-            row.insertCell(4).textContent = thetaI.toFixed(2);
-        }
-
-        // Crear los gráficos
+        // Gráficas
         let ctx1 = document.getElementById('graficoHoras').getContext('2d');
         new Chart(ctx1, {
             type: 'line',
@@ -202,13 +188,13 @@
                 labels: diasGrafica,
                 datasets: [{
                     label: 'Horas de sol',
-                    data: horasSol,
+                    data: [horaCalculada],
                     borderColor: 'orange',
                     borderWidth: 2,
                     fill: false
                 }, {
                     label: 'Horas sin sol',
-                    data: horasNoche,
+                    data: [horanocheValor],
                     borderColor: 'cyan',
                     borderWidth: 2,
                     fill: false
@@ -223,7 +209,7 @@
                 labels: diasGrafica,
                 datasets: [{
                     label: 'Declinación solar',
-                    data: declinacion,
+                    data: [delta],
                     borderColor: 'lime',
                     borderWidth: 2,
                     fill: false
@@ -238,7 +224,7 @@
                 labels: diasGrafica,
                 datasets: [{
                     label: 'Ángulo de Incidencia',
-                    data: angulosIncidencia,
+                    data: [thetaI],
                     borderColor: 'magenta',
                     borderWidth: 2,
                     fill: false
@@ -259,4 +245,3 @@
 
 </body>
 </html>
-
