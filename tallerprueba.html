@@ -43,6 +43,18 @@
         .result {
             margin-top: 20px;
         }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #444;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
         canvas {
             margin-top: 30px;
         }
@@ -79,17 +91,31 @@
     <div class="form-group">
         <button onclick="calcular()">Calcular</button>
     </div>
-    
-    <div class="result">
-        <h2>Resultados:</h2>
-        <p id="resultados"></p>
-    </div>
+</div>
+
+<div class="container">
+    <h2>Resultados:</h2>
+    <table id="tablaResultados">
+        <thead>
+            <tr>
+                <th>Día</th>
+                <th>HRA (°)</th>
+                <th>Horas de Sol</th>
+                <th>Horas sin Sol</th>
+                <th>Ángulo de Incidencia (°)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Los resultados se insertarán aquí -->
+        </tbody>
+    </table>
 </div>
 
 <div class="container">
     <h2>Gráficos</h2>
     <canvas id="graficoHoras" width="400" height="200"></canvas>
     <canvas id="graficoDeclinacion" width="400" height="200"></canvas>
+    <canvas id="graficoAnguloIncidencia" width="400" height="200"></canvas>
 </div>
 
 <script>
@@ -110,9 +136,11 @@
         let angulosIncidencia = [];
         let HRAEspecifico = null;
 
-        // Cálculos y resultados
-        let resultado = "<b>Resultados</b><br>";
+        // Limpiar tabla antes de llenarla
+        const tablaResultados = document.getElementById('tablaResultados').getElementsByTagName('tbody')[0];
+        tablaResultados.innerHTML = '';
 
+        // Cálculos y resultados
         for (let n = 1; n <= 365; n++) {
             let delta = 23.45 * Math.sin(Math.radians(((n - 81) * 360) / 365));
             let tandelta = Math.tan(Math.radians(delta));
@@ -150,17 +178,21 @@
                             Math.sin(Math.radians(beta)) * Math.sin(Math.radians(thetaZ)) * Math.cos(Math.radians(y_s - y));
             let thetaI = Math.degrees(Math.acos(cosThetaI));
 
-            // Guardar los resultados para la gráfica
+            // Guardar los resultados para la gráfica y la tabla
             diasGrafica.push(n);
             horasSol.push(hora);
             horasNoche.push(horanocheValor);
             declinacion.push(delta);
             angulosIncidencia.push(thetaI);
 
-            resultado += `Día ${n}: HRA: ${HRA.toFixed(2)}°, Horas de sol: ${horaEntera}:${minutosEntero < 10 ? "0" + minutosEntero : minutosEntero} - Horas sin sol: ${horaNocheEntera}:${minutosEnteroHoraNoche < 10 ? "0" + minutosEnteroHoraNoche : minutosEnteroHoraNoche} - Ángulo de incidencia: ${thetaI.toFixed(2)}°<br>`;
+            // Agregar a la tabla de resultados
+            const row = tablaResultados.insertRow();
+            row.insertCell(0).textContent = n;
+            row.insertCell(1).textContent = HRA.toFixed(2);
+            row.insertCell(2).textContent = `${horaEntera}:${minutosEntero < 10 ? "0" + minutosEntero : minutosEntero}`;
+            row.insertCell(3).textContent = `${horaNocheEntera}:${minutosEnteroHoraNoche < 10 ? "0" + minutosEnteroHoraNoche : minutosEnteroHoraNoche}`;
+            row.insertCell(4).textContent = thetaI.toFixed(2);
         }
-
-        document.getElementById('resultados').innerHTML = resultado;
 
         // Crear los gráficos
         let ctx1 = document.getElementById('graficoHoras').getContext('2d');
@@ -198,6 +230,21 @@
                 }]
             }
         });
+
+        let ctx3 = document.getElementById('graficoAnguloIncidencia').getContext('2d');
+        new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: diasGrafica,
+                datasets: [{
+                    label: 'Ángulo de Incidencia',
+                    data: angulosIncidencia,
+                    borderColor: 'magenta',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            }
+        });
     }
 
     // Funciones auxiliares
@@ -212,3 +259,4 @@
 
 </body>
 </html>
+
