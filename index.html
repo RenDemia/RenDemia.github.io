@@ -5,238 +5,337 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RenDemia</title>
     <link rel="icon" type="image/x-icon" href="rt_1.ico">
-    <style>
-        html, body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            color: white;
-            height: 100%;
-            overflow-x: hidden;
-        }
+<style>
+    /* Estilos generales (sin cambios) */
+    html, body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        color: white;
+        height: 100%;
+        overflow-x: hidden;
+    }
 
+    body {
+        display: flex;
+        flex-direction: column;
+        cursor: url('red2.cur') 0 0, auto;
+        position: relative;
+        z-index: 0;
+    }
+
+    #bgCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100vw;
+        height: 100vh;
+        background-color: black;
+    }
+
+    .sidebar {
+        width: 240px;
+        background-color: #094293;
+        padding: 20px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        box-shadow: 2px 0 10px rgba(0, 0, 255, 0.5);
+        border: 2px solid #1e4294;
+        box-sizing: border-box;
+        animation: glowing 1.5s ease-in-out infinite alternate;
+    }
+
+    .sidebar a {
+        display: block;
+        margin: 10px 0;
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+    }
+
+    .sidebar a:hover {
+        color: yellow;
+    }
+
+    .main-content {
+        margin-left: 240px;
+        width: calc(100% - 240px);
+        text-align: center;
+        padding: 20px;
+    }
+
+    .container {
+        background: #000000;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+        display: inline-block;
+        border: 2px solid yellow;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .logo {
+        width: 200px;
+        margin-bottom: 10px;
+    }
+	
+	.loga {
+        width: 200px;
+        margin-bottom: 10px;
+    }
+
+    .logoo {
+        width: 350px;
+        margin-bottom: 10px;
+    }
+
+    .imagen {
+        width: 100px;
+        margin-bottom: 10px;
+    }
+
+    .gif {
+        width: 200px;
+        margin-bottom: 10px;
+    }
+
+    a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    a.download-btn {
+        background-color: white;
+        color: black;
+        text-decoration: none;
+    }
+
+    a.download-btn:hover {
+        background-color: #ffcc00;
+    }
+
+    a.redes-btn {
+        background-color: white;
+        color: black;
+    }
+
+    a.redes-btn:hover {
+        background-color: #00ecff;
+    }
+
+    a.red-btn {
+        background-color: black;
+        color: white;
+    }
+
+    a.red-btn:hover {
+        background-color: #636363;
+    }
+
+    a.redd-btn {
+        background-color: purple;
+        color: white;
+    }
+
+    a.redd-btn:hover {
+        background-color: #c13584;
+    }
+
+    a:hover, button:hover {
+        cursor: url('red.cur') 6 0, pointer;
+    }
+
+    .imagenes {
+        display: none;
+    }
+
+    .imageneses {
+        width: 50px;
+    }
+
+    .gif {
+        width: 160px;
+    }
+
+    a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .logo,
+	.loga,
+    .logoo,
+    .imagen,
+    .imagenes,
+    .imageneses,
+    .gif {
+    transition: transform 0.3s ease;
+    }
+
+    .logo:hover,
+	.loga:hover,
+    .logoo:hover,
+    .imagen:hover,
+    .imagenes:hover,
+    .imageneses:hover,
+    .gif:hover {
+        transform: scale(1.1);
+    }
+
+    /* Estilos para el cubo giratorio */
+    .cube-link {
+        display: inline-block;
+        position: relative; /* Importante para el posicionamiento absoluto de la imagen */
+        margin: 10px auto; /* Centrar también en pantallas pequeñas */
+    }
+
+    .cube-container {
+        width: 80px; /* Cubo más pequeño en móvil */
+        height: 80px; /* Cubo más pequeño en móvil */
+        perspective: 400px; /* Ajusta la perspectiva para el tamaño móvil */
+    }
+
+    .rotating-cube {
+        width: 100%;
+        height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        animation: rotateCube 5s infinite linear;
+    }
+
+    .cube-face {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.7;
+        background-image: url('reff.png');
+    }
+
+    .front  { transform: translateZ(40px); } /* Ajusta el translateZ para el tamaño móvil */
+    .back   { transform: rotateY(180deg) translateZ(40px); }
+    .right  { transform: rotateY(90deg) translateZ(40px); }
+    .left   { transform: rotateY(-90deg) translateZ(40px); }
+    .top    { transform: rotateX(90deg) translateZ(40px); }
+    .bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+    @keyframes rotateCube {
+        from { transform: rotateX(0deg) rotateY(0deg); }
+        to   { transform: rotateX(360deg) rotateY(360deg); }
+    }
+
+    .logo-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 200px; /* Tamaño inicial igual al del cubo o un poco mayor */
+        z-index: 10;
+        transition: transform 0.3s ease; /* Aseguramos la transición para el hover */
+    }
+
+    .cube-link:hover .logo-overlay { /* Aplicamos el hover a la imagen cuando el cursor está sobre el enlace */
+        transform: translate(-50%, -50%) scale(1.3); /* Aumentamos la escala */
+    }
+
+    /* Estilos específicos para pantallas más pequeñas */
+    @media (max-width: 768px) {
         body {
-            display: flex;
             flex-direction: column;
-            cursor: url('red2.cur') 0 0, auto;
+        }
+
+        .sidebar {
+            width: 100%;
+            height: auto;
             position: relative;
-            z-index: 0;
-        }
-
-        #bgCanvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: -1;
-            width: 100vw;
-            height: 100vh;
-            background-color: black;
-        }
-
-	.sidebar {
-		width: 240px;
-		background-color: #094293;
-		padding: 20px;
-		position: fixed;
-		top: 0;
-		left: 0;
-		height: 100%;
-		box-shadow: 2px 0 10px rgba(0, 0, 255, 0.5);
-		border: 2px solid #1e4294;
-		box-sizing: border-box; 
-		animation: glowing 1.5s ease-in-out infinite alternate;
-	}
-		
-        .sidebar a {
-            display: block;
-            margin: 10px 0;
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        .sidebar a:hover {
-            color: yellow;
-        }
-
-        .main-content {
-            margin-left: 240px;
-            width: calc(100% - 240px);
             text-align: center;
-            padding: 20px;
+            box-shadow: none;
+            padding: 10px;
+        }
+
+        .sidebar h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar a {
+            display: inline-block;
+            margin: 5px;
+            padding: 6px 10px;
+            font-size: 16px;
+        }
+    /* esto esta modificado */
+        .main-content {
+            margin-left: 0;
+            width: 95%;
+            padding: 10px;
         }
 
         .container {
-            background: #000000;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
-            display: inline-block;
-            border: 2px solid yellow;
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 95%;
+            padding: 12px;
         }
 
         .logo {
-            width: 200px;
-            margin-bottom: 10px;
+            width: 150px; /* Logo más pequeño en móvil */
+        }
+		
+		.loga {
+            width: 200px; /* Logo más pequeño en móvil */
         }
 
         .logoo {
-            width: 350px;
-            margin-bottom: 10px;
+            width: 250px; /* Otro logo más pequeño en móvil */
         }
 
         .imagen {
-            width: 100px;
-            margin-bottom: 10px;
+            width: 60px; /* Imagen más pequeña en móvil */
         }
 
-        .gif {
-            width: 200px;
-            margin-bottom: 10px;
+        /* Estilos del cubo para móvil (dentro de la media query) */
+        .cube-link {
+            margin: 15px auto; /* Ajusta el margen para centrar en móvil */
         }
 
-        a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
+        .cube-container {
+            width: 60px; /* Cubo aún más pequeño en móvil si es necesario */
+            height: 60px; /* Cubo aún más pequeño en móvil si es necesario */
+            perspective: 300px; /* Ajusta la perspectiva para el tamaño móvil */
         }
 
-        a.download-btn {
-            background-color: white;
-            color: black;
-            text-decoration: none;
+        .front  { transform: translateZ(30px); } /* Ajusta el translateZ para el tamaño móvil */
+        .back   { transform: rotateY(180deg) translateZ(30px); }
+        .right  { transform: rotateY(90deg) translateZ(30px); }
+        .left   { transform: rotateY(-90deg) translateZ(30px); }
+        .top    { transform: rotateX(90deg) translateZ(30px); }
+        .bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+        .logo-overlay {
+            width: 200px; /* Imagen delantera más pequeña en móvil */
         }
 
-        a.download-btn:hover {
-            background-color: #ffcc00;
+        .cube-link:hover .logo-overlay {
+            transform: translate(-50%, -50%) scale(1.3); /* Misma escala para móvil */
         }
-
-        a.redes-btn {
-            background-color: white;
-            color: black;
-        }
-
-        a.redes-btn:hover {
-            background-color: #00ecff;
-        }
-
-        a.red-btn {
-            background-color: black;
-            color: white;
-        }
-
-        a.red-btn:hover {
-            background-color: #636363;
-        }
-
-        a.redd-btn {
-            background-color: purple;
-            color: white;
-        }
-
-        a.redd-btn:hover {
-            background-color: #c13584;
-        }
-
-        a:hover, button:hover {
-            cursor: url('red.cur') 6 0, pointer;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                text-align: center;
-                box-shadow: none;
-                padding: 10px;
-            }
-
-            .sidebar h2 {
-                font-size: 18px;
-                margin-bottom: 5px;
-            }
-
-            .sidebar a {
-                display: inline-block;
-                margin: 5px;
-                padding: 6px 10px;
-                font-size: 16px;
-            }
-/* esto esta modificado */
-            .main-content {
-                margin-left: 0;
-                width: 95%;
-                padding: 10px;
-            }
-
-            .container {
-                max-width: 95%;
-                padding: 12px;
-            }
-
-            .logo {
-                width: 200px;
-            }
-
-            .logoo {
-                width: 200px;
-            }
-
-            .imagen {
-                width: 80px;
-            }
-        }
-
-        .imagenes {
-            width: 200px;
-        }
-
-        .imageneses {
-            width: 50px;
-        }
-
-        .gif {
-            width: 160px;
-        }
-
-        a.download-btn, a.redes-btn, a.red-btn, a.redd-btn {
-            font-size: 14px;
-            padding: 8px;
-        }
-
-        .logo,
-        .logoo,
-        .imagen,
-        .imagenes,
-        .imageneses,
-        .gif {
-        transition: transform 0.3s ease;
-        }
-
-        .logo:hover,
-        .logoo:hover,
-        .imagen:hover,
-        .imagenes:hover,
-        .imageneses:hover,
-        .gif:hover {
-            transform: scale(1.1);
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
     <canvas id="bgCanvas"></canvas>
     <div class="sidebar">
-        <img class="logo" src="6_2.png" alt="Logo">
+        <img class="loga" src="6_2.png" alt="Logo">
         <h2>Redes Sociales (aun no activadas)</h2>
         <a class="redes-btn" href="https://www.facebook.com/" target="_blank">Facebook</a>
         <a class="red-btn" href="https://www.x.com/" target="_blank">X</a>
@@ -272,8 +371,18 @@
             <a class="download-btn" href="tallerprueba.html" target="_blank">Pruebas.</a>
             <h3 style="margin-bottom: 0;">PinDemia aun se</h3>
 		<h3 style="margin-top: 0;">encuentra en desarrollo.</h3>
-            <a href="PinDemia.html">
-                <img class="imagenes" src="pindemialogo2.png" alt="Sillón" />
+            <a class="cube-link" href="https://rendemia.github.io/PinDemia.html">
+                <div class="cube-container">
+                    <div class="rotating-cube">
+                        <div class="cube-face front"></div>
+                        <div class="cube-face back"></div>
+                        <div class="cube-face right"></div>
+                        <div class="cube-face left"></div>
+                        <div class="cube-face top"></div>
+                        <div class="cube-face bottom"></div>
+                    </div>
+                </div>
+                <img class="logo-overlay" src="pindemialogo.png" alt="PinDemia Logo">
             </a>
         </div>
         <button onclick="toggleBackground()">Cambiar fondo</button>
