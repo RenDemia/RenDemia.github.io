@@ -1,266 +1,736 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora Solar</title>
-  <link rel="icon" type="image/x-icon" href="rt_x.ico">
-  <script src="plotly-latest.min.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-	@media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-      .form-container {
-        padding: 15px;
-      }
-      input, button {
-        font-size: 14px;
-      }
-      .export-buttons button {
-        width: 100%;
-        margin: 8px 0;
-      }
-      .logo img, div > img {
-        width: 100% !important;
-        max-width: 200px;
-        height: auto;
-      }
-    }
-
-    body {
-      font-family: Arial;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      background-color: #000;
-      color: white;
-    }
-    h1, h2 {
-      text-align: center;
-      color: white;
-    }
-    .form-container {
-      max-width: 500px;
-      width: 100%;
-      background: #1e1e1e;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
-      border-radius: 8px;
-      margin-bottom: 30px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      margin-bottom: 5px;
-    }
-    input {
-      padding: 10px;
-      font-size: 16px;
-      background-color: #333;
-      border: 1px solid #555;
-      border-radius: 5px;
-      color: white;
-    }
-    button {
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      background-color: #333;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      transition: background-color 0.2s;
-    }
-    button:hover {
-      background-color: #edff21;
-	  color: black;
-    }
-    #resultado, #grafica1, #grafica2, #grafica3, #grafica4 {
-      width: 100%;
-      max-width: 600px;
-      margin-bottom: 30px;
-      min-height: 300px;
-    }
-    .export-buttons {
-      margin-bottom: 40px;
-      text-align: center;
-    }
-    .export-buttons button {
-      margin: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Solar</title>
+    <link rel="icon" type="image/x-icon" href="rt_x.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000; /* Fondo negro puro */
+            color: #e2e8f0; /* Texto claro */
+        }
+        /* Custom scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748; /* Track más oscuro */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; /* Thumb ligeramente más claro */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* Aún más claro al pasar el ratón */
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body>
-	<div class="logo">
-        <img src="6_1.png" style="width: 230px;" alt="logo">
+<body class="p-4 sm:p-8 md:p-12 min-h-screen flex items-center justify-center">
+    <div class="bg-gray-800 p-6 sm:p-8 rounded-xl w-full max-w-4xl border border-gray-700">
+        <img src="6_1.png" alt="Imagen decorativa 6_1" class="mx-auto block mb-6 rounded-lg w-32 md:w-[260px]">
+
+        <h1 class="text-3xl sm:text-4xl font-bold text-center mb-6 text-yellow-400">Calculadora de Solar</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6 mb-8">
+            <div>
+                <label for="ciudad" class="block text-sm font-medium text-gray-300 mb-1">Nombre de la Ciudad:</label>
+                <input type="text" id="ciudad" placeholder="La Paz, BCS" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+            </div>
+            <div>
+                <label for="latitud" class="block text-sm font-medium text-gray-300 mb-1">Latitud (°):</label>
+                <input type="number" id="latitud" placeholder="24.07" step="0.01" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+            </div>
+            <div>
+                <label for="longitud" class="block text-sm font-medium text-gray-300 mb-1">Longitud (°):</label>
+                <input type="number" id="longitud" placeholder="-110" step="0.01" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+            </div>
+            <div>
+                <label for="dia_adicional" class="block text-sm font-medium text-gray-300 mb-1">Día del Año (1-365):</label>
+                <input type="number" id="dia_adicional" placeholder="173" min="1" max="365" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+            </div>
+            <div>
+                <label for="hora_especifica" class="block text-sm font-medium text-gray-300 mb-1">Hora Específica (HH:MM):</label>
+                <input type="text" id="hora_especifica" placeholder="HH:MM" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+            </div>
+            <div>
+                <label for="beta" class="block text-sm font-medium text-gray-300 mb-1">Inclinación Superficie (β, °):</label>
+                <input type="number" id="beta" placeholder="24" step="0.1" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+            </div>
+            <div>
+                <label for="azimut_superficie" class="block text-sm font-medium text-gray-300 mb-1">Azimut Superficie (γs, °):</label>
+                <input type="number" id="azimut_superficie" placeholder="180" min="0" max="360" step="0.1" class="w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm">
+            </div>
+            <div class="md:col-span-2">
+                <label class="block text-sm font-medium text-gray-300 mb-1">5 Horas para Gráfica de Incidencia (HH:MM):</label>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                    <input type="text" class="hora-grafica w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" placeholder="HH:MM">
+                    <input type="text" class="hora-grafica w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" placeholder="HH:MM">
+                    <input type="text" class="hora-grafica w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" placeholder="HH:MM">
+                    <input type="text" class="hora-grafica w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" placeholder="HH:MM">
+                    <input type="text" class="hora-grafica w-full p-2 bg-gray-700 border border-gray-600 rounded-md text-gray-100 focus:ring-indigo-500 focus:border-indigo-500 shadow-sm" placeholder="HH:MM">
+                </div>
+            </div>
+        </div>
+
+        <button id="calculateBtn" class="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-4 rounded-md transition duration-300 ease-in-out transform hover:scale-105 shadow-lg mb-8">
+            Calcular
+        </button>
+
+        <div id="messageBox" class="hidden bg-red-800 text-white p-3 rounded-md mb-4" role="alert">
+            <span id="messageText"></span>
+            <button class="float-right text-white font-bold ml-2" onclick="document.getElementById('messageBox').classList.add('hidden')">&times;</button>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-4 text-indigo-300">Resultados:</h2>
+        <div class="overflow-x-auto mb-8 rounded-lg border border-gray-700">
+            <table class="min-w-full bg-gray-900 text-gray-200">
+                <thead>
+                    <tr class="bg-gray-700 text-gray-100 uppercase text-xs leading-normal">
+                        <th class="py-3 px-6 text-left">Día</th>
+                        <th class="py-3 px-6 text-left">HRA (°)</th>
+                        <th class="py-3 px-6 text-left">Horas de Sol</th>
+                        <th class="py-3 px-6 text-left">Horas sin Sol</th>
+                        <th class="py-3 px-6 text-left">Ángulo Incidencia (°)</th>
+                        <th class="py-3 px-6 text-left">Ángulo Horario (°)</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody" class="text-gray-300 text-sm font-light">
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="mb-8 p-4 bg-gray-900 rounded-lg border border-gray-700">
+            <p class="text-lg font-semibold text-indigo-300 mb-2">Resultados Específicos para el Día y Hora Ingresados:</p>
+            <p id="specificResults" class="text-gray-200"></p>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-4 text-indigo-300">Gráficas:</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-gray-900 p-4 rounded-lg shadow-inner border border-gray-700 flex flex-col items-center justify-center">
+                <canvas id="horasSolNocheChart" class="w-full h-auto"></canvas>
+            </div>
+            <div class="bg-gray-900 p-4 rounded-lg shadow-inner border border-gray-700 flex flex-col items-center justify-center">
+                <canvas id="declinacionSolarChart" class="w-full h-auto"></canvas>
+            </div>
+            <div class="bg-gray-900 p-4 rounded-lg shadow-inner border border-gray-700 flex flex-col items-center justify-center">
+                <canvas id="eotChart" class="w-full h-auto"></canvas>
+            </div>
+            <div class="bg-gray-900 p-4 rounded-lg shadow-inner border border-gray-700 flex flex-col items-center justify-center">
+                <canvas id="azimutElevacionChart" class="w-full h-auto"></canvas>
+            </div>
+            <div class="bg-gray-900 p-4 rounded-lg shadow-inner border border-gray-700 flex flex-col items-center justify-center lg:col-span-2">
+                <canvas id="incidenciaHorasUsuarioChart" class="w-full h-auto"></canvas>
+            </div>
+        </div>
     </div>
-  <h1>Calculadora Solar</h1>
-  <div class="form-container">
-    <div class="form-group">
-      <label>Ciudad:</label>
-      <input type="text" id="ciudad">
-    </div>
-    <div class="form-group">
-      <label>Latitud:</label>
-      <input type="number" id="latitud">
-    </div>
-    <div class="form-group">
-      <label>Longitud:</label>
-      <input type="number" id="longitud">
-    </div>
-    <div class="form-group">
-      <label>Día del año (1-365):</label>
-      <input type="number" id="dia">
-    </div>
-    <div class="form-group">
-      <label>Hora (HH:MM):</label>
-      <input type="time" id="hora">
-    </div>
-    <button onclick="calcular()">Calcular</button>
-  </div>
 
-  <div class="export-buttons">
-    <button onclick="descargarTodoComoImagen()">Descargar Gráficas como Imagen</button>
-    <button onclick="exportarCSV()">Exportar Datos CSV</button>
-  </div>
-  <div>
-    <img src="Las_Meninas_01.jpg" style="width: 450px;" alt="logo">
-   </div>
-	<br>
-  <div><h3>Graficas:</h3></div>
-  <div id="resultado"></div>
-  <div id="grafica1"></div>
-  <div id="grafica2"></div>
-  <div id="grafica3"></div>
-  <div id="grafica4"></div>
+    <script>
+        // Función para mostrar mensajes de alerta personalizados
+        function showMessage(message, type = 'error') {
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+            messageText.textContent = message;
+            messageBox.classList.remove('hidden', 'bg-red-800', 'bg-green-800');
+            if (type === 'error') {
+                messageBox.classList.add('bg-red-800');
+            } else {
+                messageBox.classList.add('bg-green-800');
+            }
+        }
 
-  <script>
-    function rad(x) { return x * Math.PI / 180; }
-    function deg(x) { return x * 180 / Math.PI; }
+        // Configuración global para Chart.js con tema oscuro
+        Chart.defaults.color = '#e2e8f0'; // Color del texto
+        Chart.defaults.borderColor = '#4a5568'; // Color de la línea de la cuadrícula
+        Chart.defaults.font.family = 'Inter';
 
-    let datosExportables = [];
+        // Variables para las instancias de Chart.js
+        let horasSolNocheChart, declinacionSolarChart, eotChart, azimutElevacionChart, incidenciaHorasUsuarioChart;
 
-    function calcular() {
-      const ciudad = document.getElementById("ciudad").value;
-      const latitud = parseFloat(document.getElementById("latitud").value);
-      const longitud = parseFloat(document.getElementById("longitud").value);
-      const diaAdicional = parseInt(document.getElementById("dia").value);
-      const horaStr = document.getElementById("hora").value;
-      const horas = parseInt(horaStr.split(":")[0]);
-      const minutos = parseInt(horaStr.split(":")[1]);
-      const horaDecimal = horas + minutos / 60;
+        document.getElementById('calculateBtn').addEventListener('click', calculateSolarData);
 
-      let diasdelaño = [15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349];
-      if (!diasdelaño.includes(diaAdicional)) diasdelaño.push(diaAdicional);
-      diasdelaño.sort((a, b) => a - b);
+        function calculateSolarData() {
+            // Ocultar cualquier mensaje previo
+            document.getElementById('messageBox').classList.add('hidden');
 
-      let diasgrafica = [], deltagraf = [], horasdesol = [], horanoche = [], eotgraf = [];
-      datosExportables = [];
+            // 1. Recopilación de datos de entrada
+            const ciudad = document.getElementById('ciudad').value;
+            const latitud = parseFloat(document.getElementById('latitud').value);
+            const longitud = parseFloat(document.getElementById('longitud').value);
+            let dia_adicional = parseInt(document.getElementById('dia_adicional').value);
+            const hora_24_str = document.getElementById('hora_especifica').value;
+            const beta = parseFloat(document.getElementById('beta').value);
+            const azimut_superficie = parseFloat(document.getElementById('azimut_superficie').value);
+            const y_s = azimut_superficie;
 
-      diasdelaño.forEach(n => {
-        const delta = 23.45 * Math.sin(rad(((n - 81) * 360) / 365));
-        const tandelta = Math.tan(rad(delta));
-        const tanphi = Math.tan(rad(latitud));
-        let horaSol = 0;
+            // 2. Validación de entradas
+            if (isNaN(latitud) || isNaN(longitud) || isNaN(dia_adicional) || isNaN(beta) || isNaN(azimut_superficie)) {
+                showMessage("Por favor, ingrese valores numéricos válidos para todos los campos.");
+                return;
+            }
+            if (dia_adicional < 1 || dia_adicional > 365) {
+                showMessage("El día del año debe estar entre 1 y 365.");
+                return;
+            }
+            if (beta < 0 || beta > 90) {
+                showMessage("La inclinación de la superficie (β) debe estar entre 0 y 90 grados.");
+                return;
+            }
+            if (azimut_superficie < 0 || azimut_superficie > 360) {
+                showMessage("El azimut de la superficie (γs) debe estar entre 0 y 360 grados.");
+                return;
+            }
 
-        try {
-          horaSol = (2 / 15) * deg(Math.acos(-tanphi * tandelta));
-        } catch (e) { horaSol = 0; }
+            const horaMatch = hora_24_str.match(/^(\d{2}):(\d{2})$/);
+            if (!horaMatch) {
+                showMessage("Formato de hora inválido. Use HH:MM (ej. 12:00).");
+                return;
+            }
+            const horas = parseInt(horaMatch[1]);
+            const minutos = parseInt(horaMatch[2]);
+            if (horas < 0 || horas > 23 || minutos < 0 || minutos > 59) {
+                showMessage("Hora específica inválida. Asegúrese que las horas estén entre 00-23 y los minutos entre 00-59.");
+                return;
+            }
+            const hora_especifica = horas + minutos / 60;
 
-        const B = (360 / 365) * (n - 81);
-        const EoT = 229.18 * (0.000075 + 0.001868 * Math.cos(rad(B)) - 0.032077 * Math.sin(rad(B))
-                    - 0.014615 * Math.cos(rad(2 * B)) - 0.040849 * Math.sin(rad(2 * B)));
+            const horas_usuario_para_grafica_inputs = document.querySelectorAll('.hora-grafica');
+            const horas_usuario_para_grafica = [];
+            for (const input of horas_usuario_para_grafica_inputs) {
+                const h_str = input.value;
+                const hMatch = h_str.match(/^(\d{2}):(\d{2})$/);
+                if (!hMatch) {
+                    showMessage(`Formato de hora inválido para una de las horas de la gráfica: ${h_str}. Use HH:MM.`);
+                    return;
+                }
+                const h = parseInt(hMatch[1]);
+                const m = parseInt(hMatch[2]);
+                if (h < 0 || h > 23 || m < 0 || m > 59) {
+                    showMessage(`Hora inválida para una de las horas de la gráfica: ${h_str}.`);
+                    return;
+                }
+                horas_usuario_para_grafica.push(h + m / 60);
+            }
 
-        diasgrafica.push(n);
-        deltagraf.push(delta);
-        horasdesol.push(horaSol);
-        horanoche.push(24 - horaSol);
-        eotgraf.push(EoT);
+            // 3. Variables y listas
+            let diasdelaño = [15, 46, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349];
+            // Insertar dia_adicional si no está ya presente
+            if (!diasdelaño.includes(dia_adicional)) {
+                let insertIndex = 0;
+                while (insertIndex < diasdelaño.length && diasdelaño[insertIndex] < dia_adicional) {
+                    insertIndex++;
+                }
+                diasdelaño.splice(insertIndex, 0, dia_adicional);
+            }
 
-        datosExportables.push({ dia: n, delta, horaSol, noche: 24 - horaSol, eot: EoT });
-      });
+            const diasgrafica = [];
+            const deltagraf = [];
+            const horasdesol = [];
+            const horanoche = [];
+            const eotgraf = [];
+            const horarios = [];
+            const angulos_incidencia = [];
+            const angulos_horarios = []; // Este parece ser redundante con 'horarios' en el código Python original.
 
-      document.getElementById("resultado").innerHTML = `<h2>${ciudad}</h2>`;
+            let HRA_especifico = null;
+            let theta_i_especifico = null;
 
-      const layoutBase = {
-        plot_bgcolor: '#000',
-        paper_bgcolor: '#000',
-        font: { color: 'white' }
-      };
+            const azimut_angles_trayectoria = [];
+            const elevacion_angles_trayectoria = [];
 
-      Plotly.newPlot('grafica1', [
-        { x: diasgrafica, y: horasdesol, name: 'Horas de sol', mode: 'lines+markers' },
-        { x: diasgrafica, y: horanoche, name: 'Horas de noche', mode: 'lines+markers' }
-      ], { ...layoutBase, title: 'Horas de sol y noche', xaxis: {title: 'Día'}, yaxis: {title: 'Horas'} });
+            // Calcular delta y EoT para el día adicional una sola vez
+            const delta_dia_adicional = 23.45 * Math.sin(((dia_adicional - 81) * 360 / 365) * Math.PI / 180);
+            const B_dia_adicional = (360 / 365) * (dia_adicional - 81);
+            const EoT_dia_adicional = 229.18 * (0.000075 + 0.001868 * Math.cos(B_dia_adicional * Math.PI / 180) - 0.032077 * Math.sin(B_dia_adicional * Math.PI / 180) - 0.014615 * Math.cos(2 * B_dia_adicional * Math.PI / 180) - 0.040849 * Math.sin(2 * B_dia_adicional * Math.PI / 180));
 
-      Plotly.newPlot('grafica2', [
-        { x: diasgrafica, y: deltagraf, name: 'Declinación solar', mode: 'lines+markers', marker: {color: 'green'} }
-      ], { ...layoutBase, title: 'Declinación solar', xaxis: {title: 'Día'}, yaxis: {title: 'Delta (°)'} });
+            // Limpiar tabla de resultados
+            const resultsTableBody = document.getElementById('resultsTableBody');
+            resultsTableBody.innerHTML = '';
 
-      Plotly.newPlot('grafica3', [
-        { x: diasgrafica, y: eotgraf, name: 'EoT', mode: 'lines+markers', marker: {color: 'red'} }
-      ], { ...layoutBase, title: 'Ecuación del Tiempo', xaxis: {title: 'Día'}, yaxis: {title: 'Minutos'} });
+            // 4. Bucle principal de cálculo
+            for (const n of diasdelaño) {
+                const delta = 23.45 * Math.sin(((n - 81) * 360 / 365) * Math.PI / 180); // Declinación solar
+                const tanphi = Math.tan(latitud * Math.PI / 180);
+                const tandelta = Math.tan(delta * Math.PI / 180);
 
-      const deltaDia = 23.45 * Math.sin(rad(((diaAdicional - 81) * 360) / 365));
-      let horaAmanecer = 0, horaAtardecer = 24;
-      try {
-        const ha = Math.acos(-Math.tan(rad(latitud)) * Math.tan(rad(deltaDia)));
-        horaAmanecer = 12 - (2 / 15) * deg(ha);
-        horaAtardecer = 12 + (2 / 15) * deg(ha);
-      } catch (e) {}
+                let hora_sol_rad;
+                try {
+                    const arg_acos = -tanphi * tandelta;
+                    if (arg_acos > 1) hora_sol_rad = 0; // Sol siempre arriba
+                    else if (arg_acos < -1) hora_sol_rad = Math.PI; // Sol siempre abajo
+                    else hora_sol_rad = Math.acos(arg_acos);
+                } catch (e) {
+                    hora_sol_rad = 0; // Default en caso de error
+                }
+                const hora = (2 / 15) * (hora_sol_rad * 180 / Math.PI); // Horas de sol
 
-      let horasDia = [], azimuts = [], elevaciones = [];
-      for (let t = horaAmanecer; t <= horaAtardecer; t += 0.2) {
-        const HRA = 15 * (t - 12);
-        const cosThetaZ = Math.sin(rad(latitud)) * Math.sin(rad(deltaDia)) +
-                          Math.cos(rad(latitud)) * Math.cos(rad(deltaDia)) * Math.cos(rad(HRA));
-        const thetaZ = deg(Math.acos(cosThetaZ));
-        const elev = 90 - thetaZ;
+                const horanoche_valor = 24 - hora;
+                const horaentera = Math.floor(hora);
+                const minutosentero = Math.round((hora - horaentera) * 60);
+                const horanocheentera = Math.floor(horanoche_valor);
+                const minutosenterohoranoche = Math.round((horanoche_valor - horanocheentera) * 60);
 
-        let gammaS = 180;
-        try {
-          const cosGammaS = (Math.sin(rad(deltaDia)) * Math.cos(rad(latitud)) -
-                            Math.cos(rad(deltaDia)) * Math.sin(rad(latitud)) * Math.cos(rad(HRA))) /
-                            Math.sin(rad(thetaZ));
-          gammaS = deg(Math.acos(cosGammaS));
-          if (HRA > 0) gammaS = 360 - gammaS;
-        } catch (e) {}
+                const B = (360 / 365) * (n - 81);
+                const EoT = 229.18 * (0.000075 + 0.001868 * Math.cos(B * Math.PI / 180) - 0.032077 * Math.sin(B * Math.PI / 180) - 0.014615 * Math.cos(2 * B * Math.PI / 180) - 0.040849 * Math.sin(2 * B * Math.PI / 180));
 
-        horasDia.push(t);
-        azimuts.push(gammaS);
-        elevaciones.push(elev);
-      }
+                const LSTM = 15 * Math.round(longitud / 15);
+                const TC = 4 * (longitud - LSTM) + EoT;
+                const LST = 12 + TC / 60; // LST al mediodía solar
+                const HRA = 15 * (LST - 12); // HRA al mediodía solar (debería ser 0)
+                // El HRA en la tabla original de Python parece ser el HRA del mediodía solar, que es 0.
+                // Si se refiere al HRA de salida/puesta de sol, sería diferente.
+                // Para la tabla, usaremos el HRA del mediodía solar, que es 0.
+                const HRA_table = 0;
 
-      Plotly.newPlot('grafica4', [
-        { x: azimuts, y: elevaciones, mode: 'lines+markers', name: 'Trayectoria solar', marker: {color: 'purple'} }
-      ], { ...layoutBase, title: `Azimut vs Elevación - Día ${diaAdicional}`, xaxis: {title: 'Azimut (°)'}, yaxis: {title: 'Elevación (°)'} });
-    }
+                // Cálculo del ángulo zenital (θz)
+                let cos_theta_z = Math.sin(latitud * Math.PI / 180) * Math.sin(delta * Math.PI / 180) +
+                                  Math.cos(latitud * Math.PI / 180) * Math.cos(delta * Math.PI / 180) * Math.cos(HRA_table * Math.PI / 180);
+                cos_theta_z = Math.max(-1, Math.min(1, cos_theta_z)); // Clamp value
+                const theta_z = (Math.acos(cos_theta_z) * 180 / Math.PI);
 
-    function descargarTodoComoImagen() {
-      for (let i = 1; i <= 4; i++) {
-        Plotly.downloadImage(document.getElementById(`grafica${i}`), {
-          format: 'png',
-          filename: `grafica${i}`
-        });
-      }
-    }
+                // Cálculo del ángulo de incidencia (θi)
+                const y = HRA_table; // HRA para el cálculo del ángulo de incidencia
+                let cos_theta_i;
+                try {
+                    cos_theta_i = Math.cos(beta * Math.PI / 180) * cos_theta_z +
+                                  Math.sin(beta * Math.PI / 180) * Math.sin(theta_z * Math.PI / 180) * Math.cos((y_s - y) * Math.PI / 180);
+                    cos_theta_i = Math.max(-1, Math.min(1, cos_theta_i)); // Clamp value
+                } catch (e) {
+                    cos_theta_i = 0; // Default in case of error
+                }
+                const theta_i = (Math.acos(cos_theta_i) * 180 / Math.PI);
 
-    function exportarCSV() {
-      const encabezado = "Dia,Declinacion,HorasSol,HorasNoche,EoT\n";
-      const filas = datosExportables.map(d => `${d.dia},${d.delta.toFixed(2)},${d.horaSol.toFixed(2)},${d.noche.toFixed(2)},${d.eot.toFixed(2)}`).join("\n");
-      const blob = new Blob([encabezado + filas], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "datos_solares.csv";
-      a.click();
-    }
-  </script>
+                // Añadir fila a la tabla
+                const row = resultsTableBody.insertRow();
+                row.className = 'border-b border-gray-700 hover:bg-gray-700 transition duration-150';
+                row.innerHTML = `
+                    <td class="py-3 px-6 text-left whitespace-nowrap">${n}</td>
+                    <td class="py-3 px-6 text-left">${HRA_table.toFixed(2)}</td>
+                    <td class="py-3 px-6 text-left">${String(horaentera).padStart(2, '0')}:${String(minutosentero).padStart(2, '0')}</td>
+                    <td class="py-3 px-6 text-left">${String(horanocheentera).padStart(2, '0')}:${String(minutosenterohoranoche).padStart(2, '0')}</td>
+                    <td class="py-3 px-6 text-left">${theta_i.toFixed(2)}</td>
+                    <td class="py-3 px-6 text-left">${HRA_table.toFixed(2)}</td>
+                `;
+
+                // Datos para las gráficas
+                diasgrafica.push(n);
+                deltagraf.push(delta);
+                horasdesol.push(hora);
+                horanoche.push(horanoche_valor);
+                eotgraf.push(EoT);
+                horarios.push(HRA_table);
+                angulos_incidencia.push(theta_i);
+                angulos_horarios.push(HRA_table); // Redundante pero siguiendo la estructura original
+
+                if (n === dia_adicional) {
+                    // Cálculos específicos para el día y hora ingresados
+                    HRA_especifico = 15 * (hora_especifica - 12);
+                    let cos_theta_z_esp = Math.sin(latitud * Math.PI / 180) * Math.sin(delta * Math.PI / 180) +
+                                          Math.cos(latitud * Math.PI / 180) * Math.cos(delta * Math.PI / 180) * Math.cos(HRA_especifico * Math.PI / 180);
+                    cos_theta_z_esp = Math.max(-1, Math.min(1, cos_theta_z_esp));
+                    const theta_z_esp = (Math.acos(cos_theta_z_esp) * 180 / Math.PI);
+
+                    let cos_theta_i_esp;
+                    try {
+                        cos_theta_i_esp = Math.cos(beta * Math.PI / 180) * cos_theta_z_esp +
+                                          Math.sin(beta * Math.PI / 180) * Math.sin(theta_z_esp * Math.PI / 180) *
+                                          Math.cos((y_s - HRA_especifico) * Math.PI / 180);
+                        cos_theta_i_esp = Math.max(-1, Math.min(1, cos_theta_i_esp));
+                    } catch (e) {
+                        cos_theta_i_esp = 0;
+                    }
+                    theta_i_especifico = (Math.acos(cos_theta_i_esp) * 180 / Math.PI);
+
+                    // Calculo para la trayectoria solar (Azimut vs Elevación) para el día adicional
+                    azimut_angles_trayectoria.length = 0; // Limpiar arrays
+                    elevacion_angles_trayectoria.length = 0;
+
+                    let hora_amanecer_rad;
+                    try {
+                        const arg_acos_sunrise = -Math.tan(latitud * Math.PI / 180) * Math.tan(delta * Math.PI / 180);
+                        if (arg_acos_sunrise > 1) hora_amanecer_rad = 0;
+                        else if (arg_acos_sunrise < -1) hora_amanecer_rad = Math.PI;
+                        else hora_amanecer_rad = Math.acos(arg_acos_sunrise);
+                    } catch (e) {
+                        hora_amanecer_rad = 0;
+                    }
+                    const hora_amanecer = 12 - (2 / 15) * (hora_amanecer_rad * 180 / Math.PI);
+                    const hora_atardecer = 12 + (2 / 15) * (hora_amanecer_rad * 180 / Math.PI);
+
+                    const paso = 0.1;
+                    for (let t = hora_amanecer; t <= hora_atardecer; t += paso) {
+                        const HRA_trayectoria = 15 * (t - 12);
+                        const sin_lat = Math.sin(latitud * Math.PI / 180);
+                        const cos_lat = Math.cos(latitud * Math.PI / 180);
+                        const sin_delta = Math.sin(delta * Math.PI / 180);
+                        const cos_delta = Math.cos(delta * Math.PI / 180);
+                        const cos_HRA = Math.cos(HRA_trayectoria * Math.PI / 180);
+
+                        let cos_theta_z_traj = sin_lat * sin_delta + cos_lat * cos_delta * cos_HRA;
+                        cos_theta_z_traj = Math.max(-1, Math.min(1, cos_theta_z_traj));
+                        const theta_z_traj = (Math.acos(cos_theta_z_traj) * 180 / Math.PI);
+                        const elevacion = 90 - theta_z_traj;
+
+                        if (elevacion > 0) {
+                            let sin_az = (cos_delta * Math.sin(HRA_trayectoria * Math.PI / 180)) / Math.cos(elevacion * Math.PI / 180);
+                            let cos_az = (Math.sin(elevacion * Math.PI / 180) * sin_lat - sin_delta) / (Math.cos(elevacion * Math.PI / 180) * cos_lat);
+
+                            sin_az = Math.max(-1, Math.min(1, sin_az));
+                            cos_az = Math.max(-1, Math.min(1, cos_az));
+
+                            let azimut = (Math.atan2(sin_az, cos_az) * 180 / Math.PI);
+                            if (azimut < 0) {
+                                azimut += 360;
+                            }
+                            azimut_angles_trayectoria.push(azimut);
+                            elevacion_angles_trayectoria.push(elevacion);
+                        }
+                    }
+                }
+            }
+
+            // Mostrar resultados específicos
+            document.getElementById('specificResults').innerHTML = `
+                Ángulo horario para el día ${dia_adicional} a las ${hora_especifica.toFixed(2)} horas: <span class="font-bold text-green-400">${HRA_especifico.toFixed(2)}°</span><br>
+                Ángulo de incidencia para el día ${dia_adicional} a las ${hora_especifica.toFixed(2)} horas: <span class="font-bold text-green-400">${theta_i_especifico.toFixed(2)}°</span>
+            `;
+
+            // Cálculos para la gráfica de Ángulo de Incidencia para las 5 horas del usuario
+            const angulos_incidencia_usuario = [];
+            for (const h_user of horas_usuario_para_grafica) {
+                const LSTM_dia_adicional_calc = 15 * Math.round(longitud / 15);
+                const TC_dia_adicional_calc = 4 * (longitud - LSTM_dia_adicional_calc) + EoT_dia_adicional;
+                const LST_user = h_user + TC_dia_adicional_calc / 60;
+                const HRA_user = 15 * (LST_user - 12);
+
+                let cos_theta_z_user = Math.sin(latitud * Math.PI / 180) * Math.sin(delta_dia_adicional * Math.PI / 180) +
+                                       Math.cos(latitud * Math.PI / 180) * Math.cos(delta_dia_adicional * Math.PI / 180) * Math.cos(HRA_user * Math.PI / 180);
+                cos_theta_z_user = Math.max(-1, Math.min(1, cos_theta_z_user));
+                const theta_z_user = (Math.acos(cos_theta_z_user) * 180 / Math.PI);
+
+                let cos_theta_i_user;
+                try {
+                    cos_theta_i_user = Math.cos(beta * Math.PI / 180) * cos_theta_z_user +
+                                       Math.sin(beta * Math.PI / 180) * Math.sin(theta_z_user * Math.PI / 180) *
+                                       Math.cos((y_s - HRA_user) * Math.PI / 180);
+                    cos_theta_i_user = Math.max(-1, Math.min(1, cos_theta_i_user));
+                } catch (e) {
+                    cos_theta_i_user = 0;
+                }
+                const theta_i_user = (Math.acos(cos_theta_i_user) * 180 / Math.PI);
+                angulos_incidencia_usuario.push(theta_i_user);
+            }
+
+            // 5. Renderizar/Actualizar Gráficas
+            renderCharts(ciudad, diasgrafica, horasdesol, horanoche, deltagraf, eotgraf,
+                         azimut_angles_trayectoria, elevacion_angles_trayectoria,
+                         horas_usuario_para_grafica, angulos_incidencia_usuario);
+        }
+
+        function renderCharts(ciudad, diasgrafica, horasdesol, horanoche, deltagraf, eotgraf,
+                              azimut_angles_trayectoria, elevacion_angles_trayectoria,
+                              horas_usuario_para_grafica, angulos_incidencia_usuario) {
+
+            // Destruir instancias previas si existen
+            if (horasSolNocheChart) horasSolNocheChart.destroy();
+            if (declinacionSolarChart) declinacionSolarChart.destroy();
+            if (eotChart) eotChart.destroy();
+            if (azimutElevacionChart) azimutElevacionChart.destroy();
+            if (incidenciaHorasUsuarioChart) incidenciaHorasUsuarioChart.destroy();
+
+            const commonChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#e2e8f0'
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            color: '#4a5568'
+                        },
+                        ticks: {
+                            color: '#e2e8f0'
+                        },
+                        title: {
+                            display: true,
+                            color: '#e2e8f0'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            color: '#4a5568'
+                        },
+                        ticks: {
+                            color: '#e2e8f0'
+                        },
+                        title: {
+                            display: true,
+                            color: '#e2e8f0'
+                        }
+                    }
+                }
+            };
+
+            // Gráfica 1: Horas de Sol y Noche
+            const ctx1 = document.getElementById('horasSolNocheChart').getContext('2d');
+            horasSolNocheChart = new Chart(ctx1, {
+                type: 'scatter',
+                data: {
+                    labels: diasgrafica,
+                    datasets: [
+                        {
+                            label: 'Horas de Sol',
+                            data: diasgrafica.map((d, i) => ({ x: d, y: horasdesol[i] })),
+                            backgroundColor: 'rgba(251, 191, 36, 0.8)', // orange-400
+                            borderColor: 'rgba(251, 191, 36, 1)',
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        },
+                        {
+                            label: 'Horas de Noche',
+                            data: diasgrafica.map((d, i) => ({ x: d, y: horanoche[i] })),
+                            backgroundColor: 'rgba(6, 182, 212, 0.8)', // cyan-500
+                            borderColor: 'rgba(6, 182, 212, 1)',
+                            pointRadius: 5,
+                            pointHoverRadius: 7
+                        }
+                    ]
+                },
+                options: {
+                    ...commonChartOptions,
+                    plugins: {
+                        ...commonChartOptions.plugins,
+                        title: {
+                            display: true,
+                            text: `Horas de Sol y Noche - ${ciudad}`,
+                            color: '#e2e8f0',
+                            font: { size: 18 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ...commonChartOptions.scales.x,
+                            title: {
+                                ...commonChartOptions.scales.x.title,
+                                text: 'Día del Año'
+                            }
+                        },
+                        y: {
+                            ...commonChartOptions.scales.y,
+                            title: {
+                                ...commonChartOptions.scales.y.title,
+                                text: 'Horas'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfica 2: Declinación Solar
+            const ctx2 = document.getElementById('declinacionSolarChart').getContext('2d');
+            declinacionSolarChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: diasgrafica,
+                    datasets: [{
+                        label: 'Declinación Solar',
+                        data: deltagraf,
+                        backgroundColor: 'rgba(34, 197, 94, 0.8)', // lime-500
+                        borderColor: 'rgba(34, 197, 94, 1)',
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: false
+                    }]
+                },
+                options: {
+                    ...commonChartOptions,
+                    plugins: {
+                        ...commonChartOptions.plugins,
+                        title: {
+                            display: true,
+                            text: `Declinación Solar - ${ciudad}`,
+                            color: '#e2e8f0',
+                            font: { size: 18 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ...commonChartOptions.scales.x,
+                            title: {
+                                ...commonChartOptions.scales.x.title,
+                                text: 'Día del Año'
+                            }
+                        },
+                        y: {
+                            ...commonChartOptions.scales.y,
+                            title: {
+                                ...commonChartOptions.scales.y.title,
+                                text: 'Delta (°)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfica 3: Ecuación del Tiempo (EoT)
+            const ctx3 = document.getElementById('eotChart').getContext('2d');
+            eotChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: diasgrafica,
+                    datasets: [{
+                        label: 'Ecuación del Tiempo',
+                        data: eotgraf,
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)', // red-500
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        fill: false
+                    }]
+                },
+                options: {
+                    ...commonChartOptions,
+                    plugins: {
+                        ...commonChartOptions.plugins,
+                        title: {
+                            display: true,
+                            text: `EoT - ${ciudad}`,
+                            color: '#e2e8f0',
+                            font: { size: 18 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ...commonChartOptions.scales.x,
+                            title: {
+                                ...commonChartOptions.scales.x.title,
+                                text: 'Día del Año'
+                            }
+                        },
+                        y: {
+                            ...commonChartOptions.scales.y,
+                            title: {
+                                ...commonChartOptions.scales.y.title,
+                                text: 'EoT (min)'
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfica 4: Azimut vs Elevación (Trayectoria Solar)
+            const ctx4 = document.getElementById('azimutElevacionChart').getContext('2d');
+            azimutElevacionChart = new Chart(ctx4, {
+                type: 'line', // Usar 'line' con tension: 0 para simular un plot
+                data: {
+                    labels: azimut_angles_trayectoria, // Azimut en el eje X
+                    datasets: [{
+                        label: 'Trayectoria Solar',
+                        data: azimut_angles_trayectoria.map((az, i) => ({ x: az, y: elevacion_angles_trayectoria[i] })),
+                        backgroundColor: 'rgba(192, 38, 211, 0.8)', // fuchsia-600
+                        borderColor: 'rgba(192, 38, 211, 1)',
+                        pointRadius: 3,
+                        pointHoverRadius: 5,
+                        showLine: true,
+                        tension: 0 // Línea recta entre puntos
+                    }]
+                },
+                options: {
+                    ...commonChartOptions,
+                    plugins: {
+                        ...commonChartOptions.plugins,
+                        title: {
+                            display: true,
+                            text: `Trayectoria Solar\nAzimut vs Elevación - Día ${document.getElementById('dia_adicional').value}`,
+                            color: '#e2e8f0',
+                            font: { size: 18 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ...commonChartOptions.scales.x,
+                            title: {
+                                ...commonChartOptions.scales.x.title,
+                                text: 'Azimut (°)'
+                            },
+                            min: 0,
+                            max: 360
+                        },
+                        y: {
+                            ...commonChartOptions.scales.y,
+                            title: {
+                                ...commonChartOptions.scales.y.title,
+                                text: 'Elevación (°)'
+                            },
+                            min: 0,
+                            max: 90
+                        }
+                    }
+                }
+            });
+
+            // Gráfica 5: Ángulo de Incidencia para las 5 horas del usuario
+            const ctx5 = document.getElementById('incidenciaHorasUsuarioChart').getContext('2d');
+            incidenciaHorasUsuarioChart = new Chart(ctx5, {
+                type: 'line',
+                data: {
+                    labels: horas_usuario_para_grafica.map(h => h.toFixed(2)), // Formato HH.MM
+                    datasets: [{
+                        label: 'Ángulo de Incidencia',
+                        data: angulos_incidencia_usuario,
+                        backgroundColor: 'rgba(34, 197, 94, 0.8)', // lime-500
+                        borderColor: 'rgba(34, 197, 94, 1)',
+                        tension: 0.3,
+                        pointRadius: 7,
+                        pointHoverRadius: 9,
+                        fill: false
+                    }]
+                },
+                options: {
+                    ...commonChartOptions,
+                    plugins: {
+                        ...commonChartOptions.plugins,
+                        title: {
+                            display: true,
+                            text: `Ángulo de Incidencia vs. Hora del día ${document.getElementById('dia_adicional').value}\n(Horas seleccionadas por el usuario)`,
+                            color: '#e2e8f0',
+                            font: { size: 18 }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ...commonChartOptions.scales.x,
+                            title: {
+                                ...commonChartOptions.scales.x.title,
+                                text: 'Hora del día (HH.MM)'
+                            }
+                        },
+                        y: {
+                            ...commonChartOptions.scales.y,
+                            title: {
+                                ...commonChartOptions.scales.y.title,
+                                text: 'Ángulo de Incidencia (°)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Ejecutar cálculo inicial al cargar la página
+        window.onload = calculateSolarData;
+    </script>
 </body>
 </html>
